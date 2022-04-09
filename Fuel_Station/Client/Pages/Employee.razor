@@ -1,0 +1,172 @@
+﻿@page "/Employee"
+@using FuelStation.Models.Enums
+@using Fuel_Station.Shared
+@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navManager
+
+<h1>@DeletedEmployees() Employees</h1>
+
+@*<h3>TodoList - Pending @todoList.Count(x=> !x.Finished) </h3>*@
+ @if (ActiveEmployees){
+
+    <button class="btn btn-primary" @onclick="()=>AddEmployee(employView)" >Add</button>
+
+ }
+
+@if (isLoading)
+{
+    <tr>
+    <div class="spinner-border" role="status"></div>
+    </tr>
+}
+else{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                
+                <th>Type</th>
+                <th> Start / End </th>
+                <th>Salary Per Month</th>
+                
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var employee in Employeelist.Where(x=>x.Status==ActiveEmployees))
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    <td>@employee.Surname</td>
+                    @*<td><input type="checkbox" value="@customer.Status" /></td>*@
+                    <td>@employee.EmployeeType</td>
+                     <td>@employee.HireDateStart @employee.HireDateEnd </td>
+                      <td>@employee.SalaryPerMonth</td>
+
+                     
+                     @*<td><button class="btn btn-danger" @onclick="() => EditCustomer(customer)">Edit</button></td>*@
+                    @if (ActiveEmployees)
+                    {
+                        <td><button class="btn btn-success" @onclick="()=>AddEmployee(employee)" >Edit</button></td>
+                        <td><button class="btn btn-danger" @onclick="() => DeleteEmployee(employee)">Delete</button></td>
+                    }
+                    else
+                    {
+                        
+                        <td><button class="btn btn-danger" @onclick="() => DeleteEmployee(employee)">Undo</button></td>
+                    }
+
+                        
+                    
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (ActiveEmployees)
+    {<div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+        <button class="btn btn-warning btn-sm" @onclick="()=>DeletedorActiveEmployees()">Show Deleted Customers</button>
+            </div>  
+    </div>
+        
+    }
+    else
+    {
+       <td><button class="btn btn-secondary" @onclick="()=>DeletedorActiveEmployees()">Back</button></td> 
+    }
+
+}
+
+@code{
+    List<EmployeeViewModel> Employeelist = new List<EmployeeViewModel>();
+    private bool isLoading = false;
+    private string NewName;
+    private string NewSurname;
+    private DateTime HireDateStart;
+    private DateTime? HireDateEnd;
+    private decimal SalaryPerMonth;
+    private EmployeeTypeEnum EmployeeType;
+
+    private EmployeeViewModel employView;
+    private  bool ActiveEmployees = true;
+    private string Textforwhichlisttoshow = "Show Deleted Employees";
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        await LoadCustomersFromServer();
+        isLoading = false;
+    }
+
+    private async Task LoadCustomersFromServer()
+    {
+        Employeelist = await httpClient.GetFromJsonAsync<List<EmployeeViewModel>>("Employee/GetAllEmployees");
+    }
+
+    async Task AddEmployee(EmployeeViewModel employee)
+    {
+        
+
+
+        if(employee== null)
+        {
+            navManager.NavigateTo($"/Employee/AddEmployee");
+        }
+        else
+        {
+            navManager.NavigateTo($"/Employee/AddEmployee/{employee.ID}");
+        }
+        
+
+
+
+       // await httpClient.PostAsJsonAsync("Customer", customerview);
+
+        //await LoadCustomersFromServer();
+
+    }
+    private void Inactive(EmployeeViewModel employee)
+    {
+        employee.Status = !employee.Status;
+    }
+    async Task  DeleteEmployee(EmployeeViewModel employee)
+    {
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmationJS", null);
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
+        if (true)
+        {
+            var response = await httpClient.DeleteAsync($"Employee/{employee.ID}");
+            response.EnsureSuccessStatusCode();
+            await LoadCustomersFromServer();
+        }
+    }
+    //private void EditCustomer(CustomerViewModel customer)
+    //{
+    //    NewName = customer.Name;
+    //    NewSurname = customer.Surname;
+    //    NewPhone = customer.CardNumber;
+       
+
+    //}
+    private void DeletedorActiveEmployees()
+    {
+        ActiveEmployees = !ActiveEmployees;
+        LoadCustomersFromServer();
+    }
+   
+    private string DeletedEmployees()
+    {
+        if (!ActiveEmployees)
+            return ("Deleted");
+
+        return null;
+    }
+
+
+    }
+
+

@@ -1,0 +1,161 @@
+﻿@page "/Item"
+@using FuelStation.Models.Enums
+@using Fuel_Station.Shared
+@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navManager
+
+<h1>@DeletedItems() Items</h1>
+
+@*<h3>TodoList - Pending @todoList.Count(x=> !x.Finished) </h3>*@
+ @if (ActiveItems){
+
+    <button class="btn btn-primary" @onclick="()=>AddItem(ItemView)" >Add</button>
+
+ }
+
+@if (isLoading)
+{
+    <tr>
+    <div class="spinner-border" role="status"></div>
+    </tr>
+}
+else{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Item Type</th>
+                <th>Description</th>
+                
+                <th>Code</th>
+                 <th>Price</th>
+                  <th>Cost</th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Itemlist.Where(x=>x.Status==ActiveItems))
+            {
+                <tr>
+                    <td>@item.ItemType</td>
+                    <td>@item.Description</td>
+                   <td>@item.Code</td>
+                    <td>@item.Price</td>
+                     <td>@item.Cost</td>
+                      
+                     
+                     
+                    @if (ActiveItems)
+                    {
+                        <td><button class="btn btn-success" @onclick="()=>AddItem(item)" >Edit</button></td>
+                        <td><button class="btn btn-danger" @onclick="() => DeleteItem(item)">Delete</button></td>
+                    }
+                    else
+                    {
+                        
+                        <td><button class="btn btn-danger" @onclick="() => DeleteItem(item)">Undo</button></td>
+                    }
+
+                        
+                    
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (ActiveItems)
+    {<div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+        <button class="btn btn-warning btn-sm" @onclick="()=>DeletedorActiveItems()">Show Deleted Customers</button>
+            </div>  
+    </div>
+        
+    }
+    else
+    {
+       <td><button class="btn btn-secondary" @onclick="()=>DeletedorActiveItems()">Back</button></td> 
+    }
+
+}
+
+@code{
+    List<ItemViewModel> Itemlist = new List<ItemViewModel>();
+    private bool isLoading = false;
+    private string newCode;
+    private string newDescription;
+    private decimal newPrice;
+    private decimal newCost;
+    private ItemTypeEnum newItemType;
+    private ItemViewModel ItemView;
+    private  bool ActiveItems = true;
+    private string Textforwhichlisttoshow = "Show Deleted Items";
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        await LoadItemsFromServer();
+        isLoading = false;
+    }
+
+    private async Task LoadItemsFromServer()
+    {
+        Itemlist = await httpClient.GetFromJsonAsync<List<ItemViewModel>>("Item/GetAllItems");
+    }
+
+    async Task AddItem(ItemViewModel item)
+    {
+       
+
+
+        if(item== null)
+        {
+            navManager.NavigateTo($"/Item/AddItem");
+        }
+        else
+        {
+            navManager.NavigateTo($"/Item/AddItem/{item.ID}");
+        }
+
+
+
+
+        // await httpClient.PostAsJsonAsync("Customer", customerview);
+
+        //await LoadCustomersFromServer();
+
+    }
+    private void Inactive(ItemViewModel item)
+    {
+        item.Status = !item.Status;
+    }
+    async Task  DeleteItem(ItemViewModel item)
+    {
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmationJS", null);
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
+        if (true)
+        {
+            var response = await httpClient.DeleteAsync($"Item/{item.ID}");
+            response.EnsureSuccessStatusCode();
+            await LoadItemsFromServer();
+        }
+    }
+   
+    private void DeletedorActiveItems()
+    {
+        ActiveItems = !ActiveItems;
+        LoadItemsFromServer();
+    }
+   
+    private string DeletedItems()
+    {
+        if (!ActiveItems)
+            return ("Deleted");
+
+        return null;
+    }
+
+
+    }
+
+

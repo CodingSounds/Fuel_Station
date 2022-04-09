@@ -1,0 +1,129 @@
+﻿@page "/Customers/AddCustomer/{ID:guid?}"
+@using Fuel_Station.Shared
+
+@inject NavigationManager navManager
+
+@inject HttpClient httpClient
+
+@inject IJSRuntime jsRuntime
+<h1>@AddorEdit() Customer</h1>
+<EditForm Model="@customerview" OnValidSubmit="@Save">
+    <table class=table-stripped>
+        <tr>
+            <th> <label>Name</label></th>
+            <input @bind=newName pattern="[A-Za-z]{3,15}" title="It must be between 3 and 15 characters long. Only characters." />
+
+        </tr>
+        <tr>
+            <th> <label>SurName</label></th>
+            <input @bind=newSurname pattern="[A-Za-z]{3,20}" title="It must be between 3 and 20 characters long. Only characters." />
+
+        </tr>
+        <tr>
+            <th> <label>Card Number</label></th>
+            <input @bind=newCardNumber pattern="A[0-9].{7,11}" title="It must start with A and contain after only digits.Digits between 7 to 11"/>@*//problem*@
+
+        </tr>
+        <tr>
+            <th> <button type="submit" class="btn btn-primary " @*@onclick="Save"*@>Save</button></th>
+            <th><button class="btn btn-danger " @onclick=Goback>Cancel</button></th>
+        </tr>
+
+    </table>
+</EditForm>
+        
+         
+ 
+
+@code {
+
+    CustomerViewModel customerview = new CustomerViewModel();
+
+
+    [Parameter] public Guid? ID { get; set; }
+    private string newName;
+    private string newSurname;
+    private string newCardNumber;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+        newName = null;
+        newSurname = null;
+        newCardNumber = null;
+
+        if (ID != null)
+        {
+            CustomerViewModel customer = new CustomerViewModel(); 
+            customer = await httpClient.GetFromJsonAsync<CustomerViewModel>($"Customer/GetOneCustomer{ID}");
+
+            newName = customer.Name;
+            newSurname = customer.Surname;
+            newCardNumber = customer.CardNumber;
+
+        }
+
+
+
+        //isLoading = true;
+        //await LoadCustomersFromServer();
+
+        //isLoading = false;
+    }
+
+    async Task  Save()
+    {
+
+        if(string.IsNullOrEmpty(newName)) return;
+        if(string.IsNullOrEmpty(newSurname)) return;
+        if(string.IsNullOrEmpty(newCardNumber)) return;
+
+
+        if (customerview == null)
+        {
+            customerview = new();
+        }
+        customerview.Name = newName;
+        customerview.Surname = newSurname;
+        customerview.CardNumber = newCardNumber;
+        customerview.Status = true;
+
+
+
+        newName = string.Empty;
+        newSurname=string.Empty;
+        newCardNumber=string.Empty;
+        
+
+        if (ID == null)
+        {
+            await httpClient.PostAsJsonAsync("Customer", customerview);
+        }
+        else
+        {
+            customerview.ID = ID.Value;
+            await httpClient.PutAsJsonAsync("Customer", customerview);
+
+        }
+
+        navManager.NavigateTo($"/Customer");
+
+    }
+    async Task Goback()
+    {
+        navManager.NavigateTo($"/Customer");
+    }
+
+    private string AddorEdit()
+    {
+        if (ID == null)
+        {
+            return ("Add");
+        }
+        return ("Edit");
+    }
+
+
+}

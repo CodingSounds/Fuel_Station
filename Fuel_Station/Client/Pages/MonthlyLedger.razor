@@ -1,0 +1,245 @@
+﻿@page "/monthlyledgerList"
+@using FuelStation.Models.Enums
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+
+<h1>Monthly Ledger</h1>
+
+
+@if (isLoading)
+{
+    <div class="spinner-border" role="status"></div>
+}
+else{
+      <table>
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Year</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <tr>
+            <td>
+                <EditForm Model="@monthEnum">
+                    <InputSelect @bind-Value="monthEnum">
+                       
+                        
+                            
+                            @foreach(var month in Enum.GetValues(typeof(MonthEnum)))
+                            {
+                                if ((MonthEnum)month ==MonthEnum.None )
+                                {
+                                <option value="@month">Select A Month</option>
+                                }
+                                else
+                                {
+                                <option value="@month">@month</option>
+                                }
+                            
+                            }   
+                            
+                               
+                    </InputSelect>
+                </EditForm>
+            </td>
+            <td>
+                <input @bind=year placeholder="Year"/>
+            </td>
+            <td>
+                
+                <button class="btn btn-success btn-sm" @onclick=null >Calculate</button>
+            </td>
+                
+
+    
+        </tr>      
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Income
+                </th>
+                <th>
+                    Expenses
+                </th>
+                <th>
+                    Year
+                </th>
+                <th>
+                    Month
+                </th>
+
+            </tr>
+         </thead>
+         <tbody>
+             <tr>
+                 <td>@total</td>
+                 <td>@IncomeList</td>
+                 <td>@ExpensesList</td>
+                 <td>@yearShow</td>
+                <td>@if ((MonthEnum)monthEnum !=MonthEnum.None && yearShow!=null )
+                    {
+                        @monthEnum
+                    }
+
+                 
+                 </td>
+             </tr>
+
+         </tbody>
+
+
+
+    </table>
+   
+}
+      
+
+
+@code{
+
+
+    private bool isLoading = true;
+    private decimal? IncomeList=null;
+    private decimal? ExpensesList = null;
+    private decimal? total = null;
+
+
+    private int? year=null;
+    private int? yearShow = null;
+
+    public MonthEnum monthEnum=new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+
+        isLoading = false;
+    }
+
+    ////////////////async Task()
+    ////////////////{
+        
+
+    ////////////////}
+
+   
+   
+    //private bool CheckDate()
+    //{
+    //    var month=(int)monthEnum;
+    //    var yearNumber = (int)year;
+    //    var x=_transaction?.Find(x=>x.Date.Month==month && x.Date.Year==yearNumber);
+    //    if (x == null)
+    //    {
+    //        return false;
+    //    }
+    //    return true;
+    //}
+    // private void  IncomeCalculation()
+    //{
+    //    var month=(int)monthEnum;
+    //    var yearNumber = (int)year;
+    //    IncomeList = 0;
+    //    IncomeList = _transaction?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber)?.Sum(x => x.TotalPrice);
+
+    //}
+    //private void ExpensesCalculation()
+    //{
+    //    decimal managerlistIncome = 0;
+    //    List < Guid > allEngineerListID= new();
+    //    ExpensesList = 0;
+    //    var month=(int)monthEnum;
+    //    var yearNumber = (int)year;
+
+
+    //    var transactionforExpenses=_transaction?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber);
+    //    //var distGuidOfManagers = transactionforExpenses.Select(x => x.ManagerID).ToList<Guid>().Distinct();
+    //    List<Guid> managersID = new();
+    //    List<Guid> managersIDx = new();
+    //    foreach (var trans in transactionforExpenses)
+    //    {
+    //        managersID.Add(trans.ManagerID);
+    //    }
+
+    //    foreach (var id in managersID)
+    //    {
+    //        if (!managersIDx.Contains(id)) {
+    //            managersIDx.Add(id);
+    //            managerlistIncome = managerlistIncome + _managerList.Find(x => x.ID == id).SalaryPerMonth;
+    //        }
+    //    }
+
+
+    //    //managerlistIncome = _managerList.Where(x=> distGuidOfManagers.Contains(x.ID)).Sum(x=>x.SalaryPerMonth);
+    //    //var managerlistId = _transaction.DistinctBy(x => x.ManagerID).Select(x=>x.ManagerID);
+
+
+    //    foreach(TransactionViewModel trans in transactionforExpenses)
+    //    {
+    //        foreach(TransactionLineViewModel transline in trans.TransactionLines)
+    //        {
+    //            if(!allEngineerListID.Contains(transline.EngineerID))
+    //            {
+    //                allEngineerListID.Add(transline.EngineerID);
+
+    //            }
+
+    //        }
+
+    //    }
+    //    var newEningineerList = _engineerView.Where(x => allEngineerListID.Contains(x.ID));
+    //    //var engineerlistid = _transaction.DistinctBy(x => x).Select(x=>x.ManagerID);
+    //    ExpensesList = managerlistIncome + newEningineerList?.Sum(x => x.SalaryPerMonth);
+
+
+
+    //}
+    //async Task  Total()
+    //{
+
+    //    if (monthEnum == MonthEnum.None ||year==null)
+    //    {
+
+    //    }
+    //    else
+    //    {
+    //        if (!CheckDate())
+    //        {
+    //            await jsRuntime.InvokeVoidAsync("transactionConfirmDate", null);
+    //        }
+    //        else
+    //        {
+    //            ExpensesCalculation();
+    //            IncomeCalculation();
+    //            yearShow=year;
+    //            total = IncomeList - ExpensesList;
+    //        }
+            
+
+            
+    //    }
+        
+       
+    //}
+
+   
+}

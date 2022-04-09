@@ -1,0 +1,172 @@
+﻿@page "/Item/AddItem/{ID:guid?}"
+@using FuelStation.Models.Enums
+@using Fuel_Station.Shared
+
+@inject NavigationManager navManager
+
+@inject HttpClient httpClient
+
+@inject IJSRuntime jsRuntime
+<h1>@AddorEdit() Item</h1>
+<EditForm Model="@itemView" OnValidSubmit="@Save">
+    <table class=table-stripped>
+        <td>
+                
+                    <InputSelect @bind-Value="newItemType">
+                       
+                        
+                            
+                            @foreach(var itemtype in Enum.GetValues(typeof(ItemTypeEnum)))
+                            {
+                                if ((ItemTypeEnum)itemtype ==ItemTypeEnum.None )
+                                {
+                                <option value="@itemtype">Select an Item Type</option>
+                                }
+                                else
+                                {
+                                <option value="@itemtype">@itemtype</option>
+                                }
+                            
+                            }   
+                            
+                               
+                    </InputSelect>
+               
+            </td>
+        <tr>
+            <th> <label>Description</label></th>
+            <input @bind=newDescription pattern="[A-Za-z].{0,20}" title="It must contain only letter.Max 20" />
+            
+
+        </tr>
+        <tr>
+            <th> <label>Code</label></th>
+            <input @bind=newCode pattern="[0-9]{3,7}" title="It must be between 3 and 7 digits long." />
+
+        </tr>
+        <tr>
+            <th> <label>Price</label></th>
+            <input @bind=newPrice pattern="[0-9].{0,11}" title="It must be only number.Max 11 digits" />
+
+        </tr>
+         <tr>
+            <th> <label>Cost</label></th>
+            <input @bind=newCost pattern="[0-9].{0,11}" title="It must be only number.Max 11 digits"/>
+
+        </tr>
+        <tr>
+            <th> <button type="submit" class="btn btn-primary " @*@onclick="Save"*@>Save</button></th>
+            <th><button class="btn btn-danger " @onclick=Goback>Cancel</button></th>
+        </tr>
+
+    </table>
+</EditForm>
+        
+         
+ 
+
+@code {
+
+    ItemViewModel itemView = new ItemViewModel();
+
+
+    [Parameter] public Guid? ID { get; set; }
+    private string newCode;
+    private string newDescription;
+    private decimal? newPrice;
+    private decimal? newCost;
+    private ItemTypeEnum newItemType;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+        newCode = null;
+        newDescription = null;
+        newPrice = null;
+        newCost = null;
+
+        if (ID != null)
+        {
+            ItemViewModel item = new ItemViewModel(); 
+            item = await httpClient.GetFromJsonAsync<ItemViewModel>($"Item/GetOneItem{ID}");
+
+            newCode = item.Code;
+            newDescription = item.Description;
+            newPrice = item.Price;
+            newCost = item.Cost;
+            newItemType = item.ItemType;
+
+
+        }
+
+
+
+        //isLoading = true;
+        //await LoadCustomersFromServer();
+
+        //isLoading = false;
+    }
+
+    async Task  Save()
+    {
+
+        if(string.IsNullOrEmpty(newCode)) return;
+        if(string.IsNullOrEmpty(newDescription)) return;
+        if(string.IsNullOrEmpty(newPrice.ToString())) return;
+        if(string.IsNullOrEmpty(newCost.ToString())) return;
+        if(newItemType==ItemTypeEnum.None) return;
+
+
+        if (itemView == null)
+        {
+            itemView = new();
+        }
+        itemView.Code = newCode;
+        itemView.Description = newDescription;
+        itemView.Price = newPrice.Value;
+        itemView.Status = true;
+        itemView.ItemType = newItemType;
+        itemView.Cost = newCost.Value;
+
+
+        newCost = null;
+        newPrice = null;
+
+        newCode = string.Empty;
+        newDescription=string.Empty;
+        newItemType = ItemTypeEnum.None;
+
+
+
+        if (ID == null)
+        {
+            await httpClient.PostAsJsonAsync("Item", itemView);
+        }
+        else
+        {
+            itemView.ID = ID.Value;
+            await httpClient.PutAsJsonAsync("Item", itemView);
+
+        }
+
+        navManager.NavigateTo($"/Item");
+
+    }
+    async Task Goback()
+    {
+        navManager.NavigateTo($"/Item");
+    }
+
+    private string AddorEdit()
+    {
+        if (ID == null)
+        {
+            return ("Add");
+        }
+        return ("Edit");
+    }
+
+
+}
