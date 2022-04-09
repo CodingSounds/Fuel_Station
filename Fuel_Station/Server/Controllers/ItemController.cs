@@ -115,7 +115,7 @@ namespace Fuel_Station.Server.Controllers
             if (itemtupdate == null) return NotFound();
 
 
-            itemtupdate.ID = itemViewModel.ID;
+            
             itemtupdate.Code = itemViewModel.Code;
             itemtupdate.Description = itemViewModel.Description;
             itemtupdate.Cost = itemViewModel.Cost;

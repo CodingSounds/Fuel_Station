@@ -18,5 +18,10 @@ namespace FuelStation.Models
         public EmployeeTypeEnum EmployeeType { get; set; }
 
         //EntityFrameWork properties are in Person
+
+        //Login Properties
+
+        public string Password { get; set; }
+        public string UserName { get; set; }
     }
 }

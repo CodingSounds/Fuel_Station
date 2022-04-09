@@ -19,6 +19,9 @@ namespace FuelStation.EF.Configurations
             builder.Property(Employee => Employee.Surname).HasMaxLength(50);
             builder.Property(Employee => Employee.EmployeeType).HasMaxLength(50);
 
+            builder.Property(Employee => Employee.Password).HasMaxLength(25);
+            builder.Property(Employee => Employee.UserName).HasMaxLength(25);
+
 
         }
     }
