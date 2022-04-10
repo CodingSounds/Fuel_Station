@@ -1,0 +1,62 @@
+﻿@page "/login"
+@using Fuel_Station.Shared
+
+@inject NavigationManager navManager
+
+@inject HttpClient httpClient
+
+<h1>Login</h1>
+
+    <table class=table-stripped>
+        <tr>
+            <th> <label>Username</label></th>
+            <input @bind=username pattern="[A-Za-z]{3,15}" title="It must be between 3 and 15 characters long. Only characters." />
+
+        </tr>
+        <tr>
+            <th> <label>Password</label></th>
+            <input @bind=password pattern="[A-Za-z]{3,20}" title="It must be between 3 and 20 characters long. Only characters." />
+
+        </tr>
+        
+        <tr>
+            
+            <th><button class="btn btn-primary " @onclick=Login>Login</button></th>
+        </tr>
+
+    </table>
+
+@code {
+    private string username;
+    private string password;
+    private bool loginAttempt;
+    //private List<EmployeeViewModel> Employeelist = new();
+
+    //Thelo username  kai kodikous opote allo modelo neo get
+    //Episi thelo kathe selida na exei guid pano ayton poy kanei login
+
+    protected override async Task OnInitializedAsync()
+    {
+        // isLoading = true;
+        await LoadEmployeesFromServer();
+        //isLoading = false;
+    }
+
+    private async Task LoadEmployeesFromServer()
+    {
+        //Employeelist = await httpClient.GetFromJsonAsync<List<EmployeeViewModel>>("Employee/GetAllEmployees");
+    }
+
+
+    private void Login()
+    {
+        //findblblb
+        var ID =  Guid.NewGuid();
+        if(username=="admin" && password == "admin")
+        {
+             navManager.NavigateTo($"Customer/{ID}");
+        }
+       
+    }
+
+}

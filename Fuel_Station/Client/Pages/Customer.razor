@@ -1,4 +1,4 @@
-﻿@page "/Customer"
+﻿@page "/Customer/{User:guid?}"
 @using Fuel_Station.Shared
 @inject HttpClient httpClient
 @inject IJSRuntime jsRuntime
@@ -76,6 +76,10 @@ else{
 }
 
 @code{
+
+    [Parameter] public Guid? User { get; set; }
+
+
     List<CustomerViewModel> customerlist = new List<CustomerViewModel>();
     private bool isLoading = false;
     private string NewName;
@@ -95,7 +99,7 @@ else{
 
     private async Task LoadCustomersFromServer()
     {
-        customerlist = await httpClient.GetFromJsonAsync<List<CustomerViewModel>>("Customer/GetAllCust");
+       // customerlist = await httpClient.GetFromJsonAsync<List<CustomerViewModel>>("Customer/GetAllCust");
     }
 
     async Task AddCustomer(CustomerViewModel customer)

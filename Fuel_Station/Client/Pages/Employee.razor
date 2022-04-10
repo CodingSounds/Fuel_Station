@@ -101,11 +101,11 @@ else{
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
-        await LoadCustomersFromServer();
+        await LoadEmployeesFromServer();
         isLoading = false;
     }
 
-    private async Task LoadCustomersFromServer()
+    private async Task LoadEmployeesFromServer()
     {
         Employeelist = await httpClient.GetFromJsonAsync<List<EmployeeViewModel>>("Employee/GetAllEmployees");
     }
@@ -144,7 +144,7 @@ else{
         {
             var response = await httpClient.DeleteAsync($"Employee/{employee.ID}");
             response.EnsureSuccessStatusCode();
-            await LoadCustomersFromServer();
+            await LoadEmployeesFromServer();
         }
     }
      async Task EraseEmployee(EmployeeViewModel employee)
@@ -156,7 +156,7 @@ else{
             var response = await httpClient.DeleteAsync($"Employee/Erase{employee.ID}");
 
             response.EnsureSuccessStatusCode();
-            await LoadCustomersFromServer();
+            await LoadEmployeesFromServer();
         }
     }
     //private void EditCustomer(CustomerViewModel customer)
@@ -170,7 +170,7 @@ else{
     private void DeletedorActiveEmployees()
     {
         ActiveEmployees = !ActiveEmployees;
-        LoadCustomersFromServer();
+        LoadEmployeesFromServer();
     }
    
     private string DeletedEmployees()
