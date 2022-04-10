@@ -31,7 +31,7 @@ namespace Fuel_Station.Server.Controllers
                 Code = x.Code,
                 Price = x.Price,
                 Description = x.Description,
-                Status = x.Status,
+                Status = x.Status.Value,
                 ItemType=x.ItemType,
                 Cost = x.Cost
 
@@ -44,14 +44,14 @@ namespace Fuel_Station.Server.Controllers
         public async Task<IEnumerable<ItemViewModel>> GetAll()
         {
             var result = await _ItemRepo.GetAllAsync();
-
-            var t = result.Select(x => new ItemViewModel
+            var notErasedItems = result.FindAll(x => x.Status != null);
+            var t = notErasedItems.Select(x => new ItemViewModel
             {
                 ID = x.ID,
                 Code = x.Code,
                 Price = x.Price,
                 Description = x.Description,
-                Status = x.Status,
+                Status = x.Status.Value,
                 ItemType = x.ItemType,
                 Cost = x.Cost
 
@@ -70,7 +70,7 @@ namespace Fuel_Station.Server.Controllers
                 Code = result.Code,
                 Price = result.Price,
                 Description = result.Description,
-                Status = result.Status,
+                Status = result.Status.Value,
                 ItemType = result.ItemType,
                 Cost = result.Cost
 
@@ -106,6 +106,27 @@ namespace Fuel_Station.Server.Controllers
             x.Status = !x.Status;
             await _ItemRepo.UpdateAsync(id, x);
         }
+        [HttpDelete("Erase{id}")]
+        public async Task Erase(Guid id)
+        {
+
+            var x = await _ItemRepo.GetByIdAsync(id);
+            Item item = new Item
+            {
+                ID = x.ID,
+                Code = x.Code,
+                Price = x.Price,
+                Description = x.Description,
+
+                ItemType = x.ItemType,
+                Cost = x.Cost,
+                Status = null
+            };
+
+            await _ItemRepo.DeleteAsync(id);
+            await _ItemRepo.CreateAsync(item);
+        }
+
 
 
         [HttpPut]
@@ -115,7 +136,7 @@ namespace Fuel_Station.Server.Controllers
             if (itemtupdate == null) return NotFound();
 
 
-            
+            itemtupdate.Price = itemViewModel.Price;
             itemtupdate.Code = itemViewModel.Code;
             itemtupdate.Description = itemViewModel.Description;
             itemtupdate.Cost = itemViewModel.Cost;

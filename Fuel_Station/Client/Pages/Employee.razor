@@ -28,7 +28,8 @@ else{
                 <th>Surname</th>
                 
                 <th>Type</th>
-                <th> Start / End </th>
+                <th> Start </th>
+                <th>End</th>
                 <th>Salary Per Month</th>
                 
                 
@@ -43,7 +44,8 @@ else{
                     <td>@employee.Surname</td>
                     @*<td><input type="checkbox" value="@customer.Status" /></td>*@
                     <td>@employee.EmployeeType</td>
-                     <td>@employee.HireDateStart @employee.HireDateEnd </td>
+                     <td>@employee.HireDateStart.ToFileTimeUtc() </td>
+                     <th>@employee.HireDateEnd</th>
                       <td>@employee.SalaryPerMonth</td>
 
                      
@@ -57,6 +59,7 @@ else{
                     {
                         
                         <td><button class="btn btn-danger" @onclick="() => DeleteEmployee(employee)">Undo</button></td>
+                        <td><button class="btn btn-dark" @onclick="() => EraseEmployee(employee)">Erase</button></td>
                     }
 
                         
@@ -140,6 +143,18 @@ else{
         if (true)
         {
             var response = await httpClient.DeleteAsync($"Employee/{employee.ID}");
+            response.EnsureSuccessStatusCode();
+            await LoadCustomersFromServer();
+        }
+    }
+     async Task EraseEmployee(EmployeeViewModel employee)
+    {
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmationJS", null);
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
+        if (true)
+        {
+            var response = await httpClient.DeleteAsync($"Employee/Erase{employee.ID}");
+
             response.EnsureSuccessStatusCode();
             await LoadCustomersFromServer();
         }

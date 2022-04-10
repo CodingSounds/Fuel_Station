@@ -17,7 +17,7 @@ namespace Fuel_Station.Shared
         public Guid CustomerID { get; set; }
         public PaymentMethodEnum PaymentMethod { get; set; }
 
-        public decimal TotalValue { get; set; }
+        
 
        
        public List<TransactionLineViewModel> TransactionLinesList { get; set; }
@@ -32,7 +32,7 @@ namespace Fuel_Station.Shared
         public Guid CustomerID { get; set; }
         public PaymentMethodEnum PaymentMethod { get; set; }
 
-        public decimal TotalValue { get; set; }
+        
 
 
         public List<TransactionLineViewModel> TransactionLinesList { get; set; }

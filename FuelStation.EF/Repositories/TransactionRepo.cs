@@ -48,8 +48,8 @@ namespace FuelStation.EF.Repositories
             var foundTrans = await _context.Transactions.SingleOrDefaultAsync(item => item.ID == id);
             if (foundTrans is null)
                 throw new KeyNotFoundException($"Given id '{id}' was not found in database");
-            foundTrans.TotalValue = entity.TotalValue;
-            foundTrans.Status = entity.Status;
+            
+            foundTrans.Status = entity.Status.Value;
             foundTrans.Date = entity.Date;
             foundTrans.EmployeeID = entity.EmployeeID;
             foundTrans.PaymentMethod = entity.PaymentMethod;

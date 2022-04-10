@@ -46,7 +46,7 @@ namespace FuelStation.EF.Repositories
             foundtransLIne.NetValue = entity.NetValue;
             foundtransLIne.ItemPrice = entity.ItemPrice;
             foundtransLIne.ItemID = entity.ItemID;
-            foundtransLIne.Status = entity.Status;
+            
             foundtransLIne.DiscountPercentage = entity.DiscountPercentage;
             foundtransLIne.DiscountValue = entity.DiscountValue;
             foundtransLIne.TransactionID=entity.TransactionID;

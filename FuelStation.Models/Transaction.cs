@@ -15,7 +15,7 @@ namespace FuelStation.Models
         public Guid CustomerID { get; set; }
         public PaymentMethodEnum PaymentMethod { get; set; }
 
-        public decimal TotalValue { get; set; }
+       
 
         //EntityFrameWork Properties
         public Customer Customer { get; set; }

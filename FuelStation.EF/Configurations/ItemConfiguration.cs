@@ -18,7 +18,7 @@ namespace FuelStation.EF.Configurations
             builder.Property(item => item.Code).HasMaxLength(50);
             builder.Property(item => item.Description).HasMaxLength(50);
 
-            builder.HasAlternateKey(item => item.Code);
+           
             
 
         }

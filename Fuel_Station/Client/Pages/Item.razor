@@ -55,6 +55,7 @@ else{
                     {
                         
                         <td><button class="btn btn-danger" @onclick="() => DeleteItem(item)">Undo</button></td>
+                        <td><button class="btn btn-dark" @onclick="() => EraseItem(item)">Erase</button></td>
                     }
 
                         
@@ -140,6 +141,19 @@ else{
             await LoadItemsFromServer();
         }
     }
+      async Task EraseItem(ItemViewModel item)
+    {
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmationJS", null);
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
+        if (true)
+        {
+            var response = await httpClient.DeleteAsync($"Item/Erase{item.ID}");
+
+            response.EnsureSuccessStatusCode();
+            await LoadItemsFromServer();
+        }
+    }
+
    
     private void DeletedorActiveItems()
     {

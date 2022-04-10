@@ -15,7 +15,7 @@ namespace FuelStation.EF.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CardNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
@@ -33,7 +33,9 @@ namespace FuelStation.EF.Migrations
                     HireDateEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SalaryPerMonth = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     EmployeeType = table.Column<int>(type: "int", maxLength: 50, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
@@ -52,7 +54,7 @@ namespace FuelStation.EF.Migrations
                     ItemType = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,7 +71,7 @@ namespace FuelStation.EF.Migrations
                     CustomerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     TotalValue = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,7 +103,7 @@ namespace FuelStation.EF.Migrations
                     DiscountPercentage = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     DiscountValue = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     TotalValue = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -45,7 +45,7 @@ namespace FuelStation.EF.Repositories
             if (foundItem is null)
                 throw new KeyNotFoundException($"Given id '{id}' was not found in database");
             foundItem.Price = entity.Price;
-            foundItem.Status = entity.Status;
+            foundItem.Status = entity.Status.Value;
             foundItem.Cost = entity.Cost;
             foundItem.Code = entity.Code;
             foundItem.Description = entity.Description;

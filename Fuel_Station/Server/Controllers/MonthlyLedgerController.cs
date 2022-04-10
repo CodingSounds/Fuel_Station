@@ -12,113 +12,42 @@ namespace Fuel_Station.Server.Controllers
     [Route("[controller]")]
     public class MonthlyLedgerController : ControllerBase
     {
-        private readonly IEntityRepo<Customer> _customerRepo;
+        private readonly IEntityRepo<Transaction> _transactionRepo;
+        private readonly IEntityRepo<TransactionLine> _transactionLineRepo;
+        
+        private readonly RentRepo _RentRepo;
 
-        public MonthlyLedgerController(IEntityRepo<Customer> customerRepo)
+        public MonthlyLedgerController(IEntityRepo<Transaction> transactionRepo, IEntityRepo<TransactionLine> transactionLineRepo,
+            RentRepo RentRepo)
         {
-            _customerRepo = customerRepo;
+            _transactionRepo = transactionRepo;
+            _transactionLineRepo = transactionLineRepo;
+            _RentRepo = RentRepo;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<CustomerViewModel>> Get()
+        [HttpGet("{month}/{year}")]
+        public async Task<IEnumerable<decimal>> Get(int month, int year)
         {
-            var result = await _customerRepo.GetAllAsync();
+            string date=month.ToString()+year.ToString();//desssssssss
+            decimal? rentCost = await _RentRepo.GetByIdAsync(date);
+            var tranList = await _transactionRepo.GetAllAsync();//to ekana ligo argo
+            var tranLineList = await _transactionLineRepo.GetAllAsync();
 
-            var activecustomers = result.FindAll(x => x.Status == true);
-            var t = activecustomers.Select(x => new CustomerViewModel
-            {
-                ID = x.ID,
-                Name = x.Name,
-                Surname = x.Surname,
-                CardNumber = x.CardNumber,
-                Status = x.Status,
+            var activeTransList = tranList.FindAll(x => x.Date.Year == year&& x.Date.Month == month);
+            var activeTransListID= activeTransList.Select(x=>x.ID).ToList();
+            var activeTranslineList = tranLineList.FindAll(x => activeTransListID.Contains( x.ID));
+            var Income = activeTranslineList.Sum(x => x.TotalValue);
+            var Expenses = activeTranslineList.Sum(x => (1-x.DiscountPercentage)*x.Quantity*x.ItemPrice);
+            Expenses += rentCost.Value + Expenses;
+            var Total = Income - Expenses;
+            var list=new List<decimal>();
+            list.Add(Income);
+            list.Add(Expenses.Value);
+            list.Add(Total.Value);
 
-
-            });
-
-            return t;
+            return list;
         }
-        [HttpGet("GetAllCust")]
-        public async Task<IEnumerable<CustomerViewModel>> GetAll()
-        {
-            var result = await _customerRepo.GetAllAsync();
-
-            var t = result.Select(x => new CustomerViewModel
-            {
-                ID = x.ID,
-                Name = x.Name,
-                Surname = x.Surname,
-                CardNumber = x.CardNumber,
-                Status = x.Status,
-
-            });
-
-            return t;
-        }
-        [HttpGet("GetOneCustomer{id}")]
-        public async Task<CustomerViewModel> GetOne(Guid id)
-        {
-            var result = await _customerRepo.GetByIdAsync(id);
-
-            var t = new CustomerViewModel
-            {
-                ID = result.ID,
-                Name = result.Name,
-                Surname = result.Surname,
-                CardNumber = result.CardNumber,
-                Status = result.Status,
-
-            };
-
-            return t;
-        }
-
-        [HttpPost]
-
-        public async Task Post(CustomerViewModel newcustomerview)
-        {
-            Customer customer = new Customer
-            {
-
-                ID = newcustomerview.ID,
-                Name = newcustomerview.Name,
-                Surname = newcustomerview.Surname,
-                CardNumber = newcustomerview.CardNumber,
-                Status = true
-            };
-            await _customerRepo.CreateAsync(customer);
-
-        }
-
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
-        {
-
-            var x = await _customerRepo.GetByIdAsync(id);
-            x.Status = !x.Status;
-            await _customerRepo.UpdateAsync(id, x);
-        }
-
-
-        [HttpPut]
-        public async Task<ActionResult> Put(CustomerViewModel newcustomerview)
-        {
-            var customertoupdate = await _customerRepo.GetByIdAsync(newcustomerview.ID);
-            if (customertoupdate == null) return NotFound();
-
-
-            customertoupdate.ID = newcustomerview.ID;
-            customertoupdate.Name = newcustomerview.Name;
-            customertoupdate.Surname = newcustomerview.Surname;
-            customertoupdate.CardNumber = newcustomerview.CardNumber;
-            customertoupdate.Status = newcustomerview.Status;
-
-            await _customerRepo.UpdateAsync(newcustomerview.ID, customertoupdate);
-
-
-
-            return Ok();
-        }
+       
 
 
 

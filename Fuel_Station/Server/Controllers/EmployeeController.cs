@@ -24,7 +24,7 @@ namespace Fuel_Station.Server.Controllers
         {
             var result = await _employeeRepo.GetAllAsync();
 
-            var activeemployee = result.FindAll(x => x.Status == true);
+            var activeemployee = result.FindAll(x => x.Status.Value == true);
             var t = activeemployee.Select(x => new EmployeeViewModel
             {
                 ID = x.ID,
@@ -34,7 +34,7 @@ namespace Fuel_Station.Server.Controllers
                 HireDateEnd=x.HireDateEnd,
                 SalaryPerMonth=x.SalaryPerMonth,
                 EmployeeType=x.EmployeeType,
-                Status = x.Status
+                Status = x.Status.Value
 
 
             });
@@ -45,8 +45,8 @@ namespace Fuel_Station.Server.Controllers
         public async Task<IEnumerable<EmployeeViewModel>> GetAll()
         {
             var result = await _employeeRepo.GetAllAsync();
-
-            var t = result.Select(x => new EmployeeViewModel
+            var activeemployee = result.FindAll(x => x.Status != null);
+            var t = activeemployee.Select(x => new EmployeeViewModel
             {
                 ID = x.ID,
                 Name = x.Name,
@@ -55,7 +55,7 @@ namespace Fuel_Station.Server.Controllers
                 HireDateEnd = x.HireDateEnd,
                 SalaryPerMonth = x.SalaryPerMonth,
                 EmployeeType = x.EmployeeType,
-                Status = x.Status
+                Status = x.Status.Value
 
             });
 
@@ -75,7 +75,7 @@ namespace Fuel_Station.Server.Controllers
                 HireDateEnd = result.HireDateEnd,
                 SalaryPerMonth = result.SalaryPerMonth,
                 EmployeeType = result.EmployeeType,
-                Status = result.Status
+                Status = result.Status.Value
 
             };
 
@@ -89,7 +89,7 @@ namespace Fuel_Station.Server.Controllers
             Employee employee = new Employee
             {
 
-                ID = newEmployeeView.ID,
+                ID = Guid.NewGuid(),
                 Name = newEmployeeView.Name,
                 Surname=newEmployeeView.Surname,
                 HireDateStart = newEmployeeView.HireDateStart,
@@ -97,7 +97,7 @@ namespace Fuel_Station.Server.Controllers
                 SalaryPerMonth= newEmployeeView.SalaryPerMonth,
                 EmployeeType=newEmployeeView.EmployeeType,
 
-                Status = true
+                Status = true,
             };
             await _employeeRepo.CreateAsync(employee);
 
@@ -110,6 +110,29 @@ namespace Fuel_Station.Server.Controllers
             var x = await _employeeRepo.GetByIdAsync(id);
             x.Status = !x.Status;
             await _employeeRepo.UpdateAsync(id, x);
+        }
+        [HttpDelete("Erase{id}")]
+        public async Task Erase(Guid id)
+        {
+
+            var x = await _employeeRepo.GetByIdAsync(id);
+            Employee employee = new Employee
+            {
+
+                ID = Guid.NewGuid(),
+                Name = x.Name,
+                Surname = x.Surname,
+                HireDateStart = x.HireDateStart,
+                HireDateEnd = x.HireDateEnd,
+                SalaryPerMonth = x.SalaryPerMonth,
+                EmployeeType = x.EmployeeType,
+                Status = null
+
+                
+            };
+
+            await _employeeRepo.DeleteAsync(id);
+            await _employeeRepo.CreateAsync(employee);
         }
 
 

@@ -50,7 +50,7 @@ namespace FuelStation.EF.Repositories
             foundCustomer.Name = entity.Name;
             foundCustomer.Surname = entity.Surname;
             foundCustomer.CardNumber = entity.CardNumber;
-            foundCustomer.Status = entity.Status;
+            foundCustomer.Status = entity.Status.Value;
             await _context.SaveChangesAsync();
         }
     }

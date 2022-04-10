@@ -31,7 +31,7 @@ namespace Fuel_Station.Server.Controllers
                 Name = x.Name,
                 Surname = x.Surname,
                 CardNumber = x.CardNumber,
-                Status = x.Status,
+                Status = x.Status.Value
                 
 
             });
@@ -42,14 +42,15 @@ namespace Fuel_Station.Server.Controllers
         public async Task<IEnumerable<CustomerViewModel>> GetAll()
         {
             var result = await _customerRepo.GetAllAsync();
+            var notErasedCustomers = result.FindAll(x => x.Status != null);
 
-            var t = result.Select(x => new CustomerViewModel
+            var t = notErasedCustomers.Select(x => new CustomerViewModel
             {
                 ID = x.ID,
                 Name = x.Name,
                 Surname = x.Surname,
                 CardNumber = x.CardNumber,
-                Status = x.Status,
+                Status = x.Status.Value
 
             });
 
@@ -66,7 +67,7 @@ namespace Fuel_Station.Server.Controllers
                 Name = result.Name,
                 Surname = result.Surname,
                 CardNumber = result.CardNumber,
-                Status = result.Status,
+                Status = result.Status.Value
 
             };
 
@@ -98,7 +99,24 @@ namespace Fuel_Station.Server.Controllers
             x.Status = !x.Status;
             await _customerRepo.UpdateAsync(id, x);
         }
+        [HttpDelete("Erase{id}")]
+        public async Task Erase(Guid id)
+        {
 
+            var result = await _customerRepo.GetByIdAsync(id);
+            var t = new Customer
+            {
+                ID = result.ID,
+                Name = result.Name,
+                Surname = result.Surname,
+                CardNumber = result.CardNumber,
+                Status = null
+
+            };
+
+            await _customerRepo.DeleteAsync(id);
+            await _customerRepo.CreateAsync(t);
+        }
 
         [HttpPut]
         public async Task<ActionResult> Put(CustomerViewModel newcustomerview)

@@ -50,6 +50,7 @@ else{
                     {
                         
                         <td><button class="btn btn-danger" @onclick="() => DeleteCustomer(customer)">Undo</button></td>
+                        <td><button class="btn btn-dark" @onclick="() => EraseCustomer(customer)">Erase</button></td>
                     }
 
                         
@@ -138,6 +139,18 @@ else{
         if (true)
         {
             var response = await httpClient.DeleteAsync($"Customer/{customer.ID}");
+            response.EnsureSuccessStatusCode();
+            await LoadCustomersFromServer();
+        }
+    }
+     async Task EraseCustomer(CustomerViewModel customer)
+    {
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmationJS", null);
+        //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
+        if (true)
+        {
+            var response = await httpClient.DeleteAsync($"Customer/Erase{customer.ID}");
+
             response.EnsureSuccessStatusCode();
             await LoadCustomersFromServer();
         }

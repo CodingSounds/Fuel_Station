@@ -28,7 +28,7 @@ namespace Fuel_Station.Server.Controllers
                 CustomerID = x.CustomerID,
                 EmployeeID = x.EmployeeID,
                 PaymentMethod = x.PaymentMethod,
-                TotalValue = x.TotalValue,
+                
                 Date = x.Date
                 
             });
@@ -54,7 +54,7 @@ namespace Fuel_Station.Server.Controllers
                 newtransview.ID = trans.ID;
                 newtransview.CustomerID = trans.CustomerID;
                 newtransview.PaymentMethod = trans.PaymentMethod;
-                newtransview.TotalValue = trans.TotalValue;
+                
                 
                 newtransview.Date = trans.Date;
                 newtransview.TransactionLinesList = new();
@@ -106,7 +106,7 @@ namespace Fuel_Station.Server.Controllers
                 CustomerID = transactionViewModel.CustomerID,
                 EmployeeID = transactionViewModel.EmployeeID,
                 PaymentMethod = transactionViewModel.PaymentMethod,
-                TotalValue = transactionViewModel.TotalValue,
+                
                 Status = true,
                 TransactionLinesList = new()               
             };
