@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuelStation.Models", "FuelS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuelStation.EF", "FuelStation.EF\FuelStation.EF.csproj", "{301AF326-E235-41C1-AA27-9EE5622C5BA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuel_Station.WF", "Fuel_Station.WF\Fuel_Station.WF.csproj", "{C4B81282-5387-47CA-BDA6-C3C810CFE1A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{301AF326-E235-41C1-AA27-9EE5622C5BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{301AF326-E235-41C1-AA27-9EE5622C5BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{301AF326-E235-41C1-AA27-9EE5622C5BA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4B81282-5387-47CA-BDA6-C3C810CFE1A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B81282-5387-47CA-BDA6-C3C810CFE1A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B81282-5387-47CA-BDA6-C3C810CFE1A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B81282-5387-47CA-BDA6-C3C810CFE1A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
