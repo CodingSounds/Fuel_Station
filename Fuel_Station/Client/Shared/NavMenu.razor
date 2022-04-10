@@ -11,7 +11,7 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Login
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -25,17 +25,17 @@
             </NavLink>
         </div>
          <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Customer">
+            <NavLink class="nav-link" href="Customer/{User:guid?}">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Customers
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Item">
+            <NavLink class="nav-link" href="Item{User:guid?}">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Items
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Employee">
+            <NavLink class="nav-link" href="Employee{User}">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Employees
             </NavLink>
         </div>
@@ -45,7 +45,7 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login">
+            <NavLink class="nav-link" href="index">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Login
             </NavLink>
         </div>
@@ -53,8 +53,11 @@
 </div>
 
 @code {
+
+    [Parameter] public Guid? User { get; set; }
     private bool collapseNavMenu = true;
 
+  
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()

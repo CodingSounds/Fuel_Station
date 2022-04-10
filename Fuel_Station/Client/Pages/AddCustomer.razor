@@ -1,4 +1,4 @@
-﻿@page "/Customers/AddCustomer/{ID:guid?}"
+﻿@page "/Customers/AddCustomer/{User:guid?}/{ID:guid?}"
 @using Fuel_Station.Shared
 
 @inject NavigationManager navManager
@@ -7,7 +7,7 @@
 
 @inject IJSRuntime jsRuntime
 <h1>@AddorEdit() Customer</h1>
-<EditForm Model="@customerview" OnValidSubmit="@Save">
+<EditForm Model="@customerview" OnValidSubmit="Save">
     <table class=table-stripped>
         <tr>
             <th> <label>Name</label></th>
@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <th> <button type="submit" class="btn btn-primary " @*@onclick="Save"*@>Save</button></th>
-            <th><button class="btn btn-danger " @onclick=Goback>Cancel</button></th>
+            <th><button class="btn btn-danger " @onclick="Goback">Cancel</button></th>
         </tr>
 
     </table>
@@ -41,6 +41,7 @@
 
 
     [Parameter] public Guid? ID { get; set; }
+    [Parameter] public Guid? User { get; set; }
     private string newName;
     private string newSurname;
     private string newCardNumber;
@@ -54,10 +55,11 @@
         newSurname = null;
         newCardNumber = null;
 
+
         if (ID != null)
         {
             CustomerViewModel customer = new CustomerViewModel(); 
-            customer = await httpClient.GetFromJsonAsync<CustomerViewModel>($"Customer/GetOneCustomer{ID}");
+            customer = await httpClient.GetFromJsonAsync<CustomerViewModel>($"Customer/GetOneCustomer{User.Value}/{ID}");
 
             newName = customer.Name;
             newSurname = customer.Surname;
@@ -108,12 +110,12 @@
 
         }
 
-        navManager.NavigateTo($"/Customer");
+        navManager.NavigateTo($"/Customer/{User.Value}");
 
     }
     async Task Goback()
     {
-        navManager.NavigateTo($"/Customer");
+        navManager.NavigateTo($"/Customer/{User.Value}");
     }
 
     private string AddorEdit()

@@ -1,4 +1,4 @@
-﻿@page "/Employee"
+﻿@page "/Employee/{User:guid?}"
 @using FuelStation.Models.Enums
 @using Fuel_Station.Shared
 @inject HttpClient httpClient
@@ -85,6 +85,10 @@ else{
 }
 
 @code{
+    [Parameter] public Guid? User { get; set; }
+
+
+
     List<EmployeeViewModel> Employeelist = new List<EmployeeViewModel>();
     private bool isLoading = false;
     private string NewName;
@@ -107,7 +111,7 @@ else{
 
     private async Task LoadEmployeesFromServer()
     {
-        Employeelist = await httpClient.GetFromJsonAsync<List<EmployeeViewModel>>("Employee/GetAllEmployees");
+        Employeelist = await httpClient.GetFromJsonAsync<List<EmployeeViewModel>>($"Employee/GetAllEmployees{User.Value}");
     }
 
     async Task AddEmployee(EmployeeViewModel employee)
@@ -117,11 +121,11 @@ else{
 
         if(employee== null)
         {
-            navManager.NavigateTo($"/Employee/AddEmployee");
+            navManager.NavigateTo($"/Employee/AddEmployee/{User.Value}/{null}");
         }
         else
         {
-            navManager.NavigateTo($"/Employee/AddEmployee/{employee.ID}");
+            navManager.NavigateTo($"/Employee/AddEmployee/{User.Value}/{employee.ID}");
         }
         
 

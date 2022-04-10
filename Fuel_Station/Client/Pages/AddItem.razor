@@ -1,4 +1,4 @@
-﻿@page "/Item/AddItem/{ID:guid?}"
+﻿@page "/Item/AddItem/{User:guid?}/{ID:guid?}"
 @using FuelStation.Models.Enums
 @using Fuel_Station.Shared
 
@@ -69,8 +69,9 @@
 
     ItemViewModel itemView = new ItemViewModel();
 
-
     [Parameter] public Guid? ID { get; set; }
+    [Parameter] public Guid? User { get; set; }
+
     private string newCode;
     private string newDescription;
     private decimal? newPrice;
@@ -90,7 +91,7 @@
         if (ID != null)
         {
             ItemViewModel item = new ItemViewModel(); 
-            item = await httpClient.GetFromJsonAsync<ItemViewModel>($"Item/GetOneItem{ID}");
+            item = await httpClient.GetFromJsonAsync<ItemViewModel>($"Item/GetOneItem{User.Value}/{ID}");
 
             newCode = item.Code;
             newDescription = item.Description;
@@ -151,12 +152,13 @@
 
         }
 
-        navManager.NavigateTo($"/Item");
+        navManager.NavigateTo($"/Item/{User.Value}");
+
 
     }
     async Task Goback()
     {
-        navManager.NavigateTo($"/Item");
+        navManager.NavigateTo($"/Item/{User.Value}");
     }
 
     private string AddorEdit()

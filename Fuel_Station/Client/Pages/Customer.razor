@@ -93,13 +93,14 @@ else{
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
-        await LoadCustomersFromServer();
+        await LoadCustomersFromServer(User.Value);
         isLoading = false;
     }
 
-    private async Task LoadCustomersFromServer()
+    private async Task LoadCustomersFromServer(Guid? id)
     {
-       // customerlist = await httpClient.GetFromJsonAsync<List<CustomerViewModel>>("Customer/GetAllCust");
+        customerlist = await httpClient.GetFromJsonAsync<List<CustomerViewModel>>($"Customer/GetAllCust{id}");
+
     }
 
     async Task AddCustomer(CustomerViewModel customer)
@@ -117,11 +118,11 @@ else{
 
         if(customer== null)
         {
-            navManager.NavigateTo($"/Customers/AddCustomer");
+            navManager.NavigateTo($"/Customers/AddCustomer/{User.Value}/{null}");
         }
         else
         {
-            navManager.NavigateTo($"/Customers/AddCustomer/{customer.ID}");
+            navManager.NavigateTo($"/Customers/AddCustomer/{User.Value}/{customer.ID}");
         }
         
 
@@ -144,7 +145,7 @@ else{
         {
             var response = await httpClient.DeleteAsync($"Customer/{customer.ID}");
             response.EnsureSuccessStatusCode();
-            await LoadCustomersFromServer();
+            await LoadCustomersFromServer(User.Value);
         }
     }
      async Task EraseCustomer(CustomerViewModel customer)
@@ -156,7 +157,7 @@ else{
             var response = await httpClient.DeleteAsync($"Customer/Erase{customer.ID}");
 
             response.EnsureSuccessStatusCode();
-            await LoadCustomersFromServer();
+            await LoadCustomersFromServer(User.Value);
         }
     }
     //private void EditCustomer(CustomerViewModel customer)
@@ -170,7 +171,7 @@ else{
     private void DeletedorActiveCustomers()
     {
         ActiveCustomers = !ActiveCustomers;
-        LoadCustomersFromServer();
+        LoadCustomersFromServer(User.Value);
     }
    
     private string DeletedCustomers()

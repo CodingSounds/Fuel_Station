@@ -1,4 +1,4 @@
-﻿@page "/Item"
+﻿@page "/Item/{User:guid?}"
 @using FuelStation.Models.Enums
 @using Fuel_Station.Shared
 @inject HttpClient httpClient
@@ -81,6 +81,8 @@ else{
 }
 
 @code{
+     [Parameter] public Guid? User { get; set; }
+
     List<ItemViewModel> Itemlist = new List<ItemViewModel>();
     private bool isLoading = false;
     private string newCode;
@@ -101,7 +103,7 @@ else{
 
     private async Task LoadItemsFromServer()
     {
-        Itemlist = await httpClient.GetFromJsonAsync<List<ItemViewModel>>("Item/GetAllItems");
+        Itemlist = await httpClient.GetFromJsonAsync<List<ItemViewModel>>($"Item/GetAllItems{User.Value}");
     }
 
     async Task AddItem(ItemViewModel item)
@@ -111,11 +113,11 @@ else{
 
         if(item== null)
         {
-            navManager.NavigateTo($"/Item/AddItem");
+            navManager.NavigateTo($"/Item/AddItem/{User.Value}/{null}");
         }
         else
         {
-            navManager.NavigateTo($"/Item/AddItem/{item.ID}");
+            navManager.NavigateTo($"/Item/AddItem/{User.Value}/{item.ID}");
         }
 
 

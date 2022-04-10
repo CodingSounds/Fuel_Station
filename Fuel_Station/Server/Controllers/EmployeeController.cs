@@ -2,8 +2,7 @@
 using FuelStation.Models;
 using Microsoft.AspNetCore.Mvc;
 using Fuel_Station.Shared;
-
-
+using FuelStation.Models.Enums;
 
 namespace Fuel_Station.Server.Controllers
 {
@@ -41,29 +40,58 @@ namespace Fuel_Station.Server.Controllers
 
             return t;
         }
-        [HttpGet("GetAllEmployees")]
-        public async Task<IEnumerable<EmployeeViewModel>> GetAll()
+        [HttpGet("GetAllEmployees{user}")]
+        public async Task<IEnumerable<EmployeeViewModel>> GetAll(Guid user)
+        {
+            
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
+
+            if(userEmploy.EmployeeType == EmployeeTypeEnum.Manager)
+            {
+                var result = await _employeeRepo.GetAllAsync();
+                var activeemployee = result.FindAll(x => x.Status != null);
+                var t = activeemployee.Select(x => new EmployeeViewModel
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    HireDateStart = x.HireDateStart,
+                    HireDateEnd = x.HireDateEnd,
+                    SalaryPerMonth = x.SalaryPerMonth,
+                    EmployeeType = x.EmployeeType,
+                    Status = x.Status.Value
+
+                });
+
+                return t;
+            }
+            return null;
+           
+        }
+        [HttpGet("GetUser{username}/{password}")]
+        public async Task<Guid?> LoginGet(string username, string password)
         {
             var result = await _employeeRepo.GetAllAsync();
-            var activeemployee = result.FindAll(x => x.Status != null);
-            var t = activeemployee.Select(x => new EmployeeViewModel
+            List< Employee> activeemployee = result.FindAll(x => x.Status != null);
+            
+            Employee? loginEmployee= activeemployee.FirstOrDefault(x=>x.Password==password && x.UserName==username);
+
+            if (loginEmployee == null)
             {
-                ID = x.ID,
-                Name = x.Name,
-                Surname = x.Surname,
-                HireDateStart = x.HireDateStart,
-                HireDateEnd = x.HireDateEnd,
-                SalaryPerMonth = x.SalaryPerMonth,
-                EmployeeType = x.EmployeeType,
-                Status = x.Status.Value
+                return null;
+            }
 
-            });
-
-            return t;
+            return loginEmployee.ID;
         }
-        [HttpGet("GetOneEmployee{id}")]
-        public async Task<EmployeeViewModel> GetOne(Guid id)
+        [HttpGet("GetOneEmployee{user}/{id}")]
+        public async Task<EmployeeViewModel> GetOne(Guid user, Guid id)
         {
+            
+            var type = await _employeeRepo.GetByIdAsync(user);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager))
+            {
+                return null;
+            }
             var result = await _employeeRepo.GetByIdAsync(id);
 
             var t = new EmployeeViewModel

@@ -1,4 +1,4 @@
-﻿@page "/Employee/AddEmployee/{ID:guid?}"
+﻿@page "/Employee/AddEmployee/{User:guid?}/{ID:guid?}"
 @using FuelStation.Models.Enums
 @using Fuel_Station.Shared
 
@@ -64,6 +64,8 @@
 
 
     [Parameter] public Guid? ID { get; set; }
+    [Parameter] public Guid? User { get; set; }
+
     private string newName;
     private string newSurname;
     private decimal? salaryPerMonth;
@@ -82,7 +84,7 @@
         if (ID != null)
         {
             EmployeeViewModel employee = new EmployeeViewModel(); 
-            employee = await httpClient.GetFromJsonAsync<EmployeeViewModel>($"Employee/GetOneEmployee{ID}");
+            employee = await httpClient.GetFromJsonAsync<EmployeeViewModel>($"Employee/GetOneEmployee{User.Value}/{ID}");
 
             newName = employee.Name;
             newSurname = employee.Surname;
@@ -140,12 +142,12 @@
 
         }
 
-        navManager.NavigateTo($"/Employee");
+        navManager.NavigateTo($"/Employee/{User.Value}");
 
     }
     async Task Goback()
     {
-        navManager.NavigateTo($"/Employee");
+        navManager.NavigateTo($"/Employee/{User.Value}");
     }
 
     private string AddorEdit()

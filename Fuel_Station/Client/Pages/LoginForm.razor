@@ -1,4 +1,4 @@
-﻿@page "/login"
+﻿@page "/"
 @using Fuel_Station.Shared
 
 @inject NavigationManager navManager
@@ -21,7 +21,7 @@
         
         <tr>
             
-            <th><button class="btn btn-primary " @onclick=Login>Login</button></th>
+            <th><button class="btn btn-primary " @onclick="()=>Login(password,username)">Login</button></th>
         </tr>
 
     </table>
@@ -48,14 +48,17 @@
     }
 
 
-    private void Login()
+    private async Task Login(string password,string username)
     {
         //findblblb
-        var ID =  Guid.NewGuid();
-        if(username=="admin" && password == "admin")
+        var ID = await httpClient.GetFromJsonAsync<Guid?>($"Employee/GetUser{username}/{password}");
+
+
+        if(ID!=null)
         {
              navManager.NavigateTo($"Customer/{ID}");
         }
+        
        
     }
 

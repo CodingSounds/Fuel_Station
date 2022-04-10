@@ -2,8 +2,7 @@
 using FuelStation.Models;
 using Microsoft.AspNetCore.Mvc;
 using Fuel_Station.Shared;
-
-
+using FuelStation.Models.Enums;
 
 namespace Fuel_Station.Server.Controllers
 {
@@ -13,10 +12,12 @@ namespace Fuel_Station.Server.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly IEntityRepo<Customer> _customerRepo;
+        private readonly IEntityRepo<Employee> _employeeRepo;
 
-        public CustomerController(IEntityRepo<Customer> customerRepo)
+        public CustomerController(IEntityRepo<Customer> customerRepo, IEntityRepo<Employee> employeeRepo)
         {
             _customerRepo = customerRepo;
+            _employeeRepo = employeeRepo;
         }
 
         [HttpGet]
@@ -38,27 +39,42 @@ namespace Fuel_Station.Server.Controllers
 
             return t;
         }
-        [HttpGet("GetAllCust")]
-        public async Task<IEnumerable<CustomerViewModel>> GetAll()
+        [HttpGet("GetAllCust{user}")]
+        public async Task<IEnumerable<CustomerViewModel>> GetAll(Guid user)
         {
             var result = await _customerRepo.GetAllAsync();
-            var notErasedCustomers = result.FindAll(x => x.Status != null);
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
 
-            var t = notErasedCustomers.Select(x => new CustomerViewModel
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager)
             {
-                ID = x.ID,
-                Name = x.Name,
-                Surname = x.Surname,
-                CardNumber = x.CardNumber,
-                Status = x.Status.Value
+                var notErasedCustomers = result.FindAll(x => x.Status != null);
 
-            });
+                var t = notErasedCustomers.Select(x => new CustomerViewModel
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    CardNumber = x.CardNumber,
+                    Status = x.Status.Value
 
-            return t;
+                }
+          );
+
+                return t;
+            }
+            return null;
         }
-        [HttpGet("GetOneCustomer{id}")]
-        public async Task<CustomerViewModel> GetOne(Guid id)
+            
+
+
+        [HttpGet("GetOneCustomer{user}/{id}")]
+        public async Task<CustomerViewModel> GetOne(Guid user,Guid id)
         {
+            var type = await _employeeRepo.GetByIdAsync(user);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager|| type.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
+                return null;
+            }
             var result = await _customerRepo.GetByIdAsync(id);
 
             var t = new CustomerViewModel
