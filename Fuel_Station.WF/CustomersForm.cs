@@ -24,7 +24,7 @@ namespace Fuel_Station.WF
         public Guid UserID { get; set; }
         public string customerListString;
 
-        public List<CustomerViewModel> customerList { get; set; }
+        private List<CustomerViewModel> customerList { get; set; }
 
         Handlers handlers = new();
 
@@ -37,7 +37,7 @@ namespace Fuel_Station.WF
         private async void CustomersForm_Load(object sender, EventArgs e)
         {
 
-            LoadCustomers();
+            await LoadCustomers();
             SetDataBindings();
             
              gridView1.OptionsBehavior.Editable=false;//??
@@ -46,7 +46,7 @@ namespace Fuel_Station.WF
 
         }
 
-        private async void LoadCustomers()
+        private async Task LoadCustomers()
         {
             int? employee = await handlers.GetEmployee(UserID);
 

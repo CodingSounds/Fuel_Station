@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fuel_Station.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,18 +15,25 @@ namespace Fuel_Station.WF
     {
         public Guid UserID { get; set; }
         Handlers handlers = new();
+        List<TransactionViewModel> transactionList = new();
         public TransactionForm()
         {
             InitializeComponent();
+
+            EditabilityOfGrids(false);
+
+
         }
 
-        private void TransactionForm_Load(object sender, EventArgs e)
+        private async void TransactionForm_Load(object sender, EventArgs e)
         {
-
+            await LoadTransactions();
+            SetDataBindings();
         }
 
-        private async void LoadTransactions()
+        private async Task LoadTransactions()
         {
+            transactionList= await handlers.LoadingTransactionList(UserID);
 
         }
 
@@ -35,10 +43,30 @@ namespace Fuel_Station.WF
         {
 
             BindingSource bsTransaction = new BindingSource();
-           // bsTransaction.DataSource = customerList;
-            //gridTransaction.DataSource = bsCustomers;
+            bsTransaction.DataSource = transactionList;
+            gridTransaction.DataSource = bsTransaction;
+
+     
+         
 
 
+
+
+
+        }
+        private void EditabilityOfGrids(bool i)
+        {
+            gridViewTransaction.OptionsBehavior.Editable = i;
+            gridViewTransactionLines.OptionsBehavior.Editable = i;
+        }
+
+        private void gridViewTransaction_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
+        {
+            int index = gridViewTransaction.FocusedRowHandle;
+            BindingSource bsLines = new BindingSource();
+            var transactionView =gridViewTransaction.GetRow(index) as TransactionViewModel;
+            bsLines.DataSource = transactionView.TransactionLinesList;
+            gridTransactionLines.DataSource = bsLines;
 
         }
     }

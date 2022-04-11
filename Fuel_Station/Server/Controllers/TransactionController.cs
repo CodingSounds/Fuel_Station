@@ -2,52 +2,71 @@
 using FuelStation.Models;
 using Microsoft.AspNetCore.Mvc;
 using Fuel_Station.Shared;
-
-
+using FuelStation.Models.Enums;
 
 namespace Fuel_Station.Server.Controllers
-{    [Route("[controller]")]
+{    
     [ApiController]
+    [Route("[controller]")]
     public class TransactionController {
         private IEntityRepo<Transaction> _transactionRepo;
         private IEntityRepo<TransactionLine> _translinesRepo;
+        private readonly IEntityRepo<Employee> _employeeRepo;
 
-        public TransactionController(IEntityRepo<Transaction> transactionRepo, IEntityRepo<TransactionLine>  translinesRepo) {
+        public TransactionController(IEntityRepo<Transaction> transactionRepo, IEntityRepo<TransactionLine> translinesRepo,
+             IEntityRepo<Employee> employeeRepo) {
             _transactionRepo = transactionRepo;
             _translinesRepo = translinesRepo;
+            _employeeRepo = employeeRepo;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<TransactionViewModel>> Get()
+        [HttpGet("WholeTransaction{user}")]
+        public async Task<IEnumerable<TransactionViewModel>> GetalsoTransactionLines(Guid user)
         {
-            var result = await _transactionRepo.GetAllAsync();
+           
 
-            return result.Select(x => new TransactionViewModel
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager || userEmploy.EmployeeType == EmployeeTypeEnum.Cashier)
             {
-                ID = x.ID,
-                CustomerID = x.CustomerID,
-                EmployeeID = x.EmployeeID,
-                PaymentMethod = x.PaymentMethod,
-                
-                Date = x.Date
-                
-            });
-        }
-        [HttpGet("WholeTransaction")]
-        public async Task<IEnumerable<TransactionViewModel>> GetalsoTransactionLines()
-        {
-            var result = await _transactionRepo.GetAllAsync();
-            var newtransviewList = new List<TransactionViewModel>();
-            //var transactionViewModel = result.Select(x => new TransactionViewModel
-            //{
-            //    Id = x.ID,
-            //    CustomerID = x.CustomerID,
-            //    CarID = x.CarID,
-            //    ManagerID = x.ManagerID,
-            //    TotalPrice = x.TotalPrice,
-            //    Date = x.Date
+                var result = await _transactionRepo.GetAllAsync();
+                return result.Select(x => new TransactionViewModel
+                {
+                    ID = x.ID,
+                    CustomerID = x.CustomerID,
+                    EmployeeID = x.EmployeeID,
+                    PaymentMethod = x.PaymentMethod,
+                    CardNumber=x.Customer.CardNumber,
+                    EmployeeType=x.Employee.EmployeeType.ToString(),
+                    Date = x.Date,
+                    
 
-            //});
+
+
+
+                });
+            }
+            return null;           
+        }
+       
+
+
+
+        
+        [HttpGet("{user}")]
+        public async Task<IEnumerable<TransactionViewModel>> Get(Guid user)
+        {
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
+            if (!(userEmploy.EmployeeType == EmployeeTypeEnum.Manager || userEmploy.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
+                return null;
+            }
+
+
+
+            var result = await _transactionRepo.GetAllAsync();
+
+            var newtransviewList = new List<TransactionViewModel>();
+           
             foreach (var trans in result)
             {
                 var newtransview = new TransactionViewModel();
@@ -57,9 +76,16 @@ namespace Fuel_Station.Server.Controllers
                 
                 
                 newtransview.Date = trans.Date;
+                newtransview.CardNumber = trans.Customer.CardNumber;
+                newtransview.EmployeeType = trans.Employee.EmployeeType.ToString();
                 newtransview.TransactionLinesList = new();
-                foreach (var transline in trans.TransactionLinesList)
+
+                var transactionLinesList = await _translinesRepo.GetAllAsync();
+                var lines = transactionLinesList.Where(x => x.TransactionID == trans.ID);
+
+                foreach (var transline in lines)
                 {
+                    
                     var translineViewModel = new TransactionLineViewModel()
                     {
                         ItemPrice = transline.ItemPrice,
@@ -67,8 +93,9 @@ namespace Fuel_Station.Server.Controllers
                         TotalValue = transline.TotalValue,
                         NetValue = transline.NetValue,
                         DiscountPercentage = transline.DiscountPercentage,
-                        ItemID = transline.ItemID,
+                        ItemCode = transline.Item.Code,
                         DiscountValue = transline.DiscountValue
+
 
 
                     };

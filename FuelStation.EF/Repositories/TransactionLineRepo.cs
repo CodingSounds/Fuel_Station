@@ -31,7 +31,7 @@ namespace FuelStation.EF.Repositories
         }
         public async Task<List<TransactionLine>> GetAllAsync()
         {
-            return await _context.TransactionLines.ToListAsync();
+            return await _context.TransactionLines.Include(x=>x.Item).ToListAsync();
         }
         public async Task<TransactionLine?> GetByIdAsync(Guid id)
         {

@@ -23,12 +23,15 @@ namespace Fuel_Station.Server.Controllers
         [HttpGet("{user}")]
         public async Task<IEnumerable<CustomerViewModel>> Get(Guid user)
         {
-            var result = await _customerRepo.GetAllAsync();
+           
             var userEmploy = await _employeeRepo.GetByIdAsync(user);
+
+
 
             if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager || userEmploy.EmployeeType == EmployeeTypeEnum.Cashier)
             {
 
+                var result = await _customerRepo.GetAllAsync();
                 var activecustomers = result.FindAll(x => x.Status == true);
                 var t = activecustomers.Select(x => new CustomerViewModel
                 {

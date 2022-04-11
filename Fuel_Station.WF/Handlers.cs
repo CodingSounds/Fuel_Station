@@ -48,6 +48,18 @@ namespace Fuel_Station.WF
 
 
         }
+        public async Task<List<TransactionViewModel>> LoadingTransactionList(Guid id)
+        {
+            using var client = new HttpClient();
+
+            var transactionListString = await client.GetStringAsync($"https://localhost:7009/Transaction/{id}");
+            var transactionList = JsonConvert.DeserializeObject<List<TransactionViewModel>>(transactionListString);
+
+            return transactionList;
+
+
+
+        }
         public async void LoginConfirmation(int employee, Form f)//douleuei>????
         {
             string employeeType = EmployeeTypeString(employee);

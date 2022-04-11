@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FuelStation.EF.Repositories
 {
-    internal class TransactionRepo:IEntityRepo<Transaction>
+    public class TransactionRepo:IEntityRepo<Transaction>
     {
 
         private readonly FuelStationContext _context;
@@ -35,8 +35,9 @@ namespace FuelStation.EF.Repositories
 
         public async Task<List<Transaction>> GetAllAsync()
         {
-            return await _context.Transactions.ToListAsync();
+            return await _context.Transactions.Include(x => x.Employee).Include(x => x.Customer).ToListAsync();
         }
+       
 
         public async Task<Transaction?> GetByIdAsync(Guid id)
         {

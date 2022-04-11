@@ -10,7 +10,9 @@ namespace Fuel_Station.Shared
     {
         public Guid ID { get; set; }
         public Guid TransactionID { get; set; }
-        public Guid ItemID { get; set; }
+        public Guid ItemID { get; set; }//xreiazetai?
+
+        public string ItemCode { get; set; }
         public decimal? Quantity { get; set; }//Sigoura to thelo decimal logo kausimon?
         public decimal ItemPrice { get; set; }
         public decimal NetValue { get; set; }
