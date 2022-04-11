@@ -12,9 +12,10 @@ namespace Fuel_Station.WF
 {
     public partial class MenuForm : Form
     {
-        public Guid UserID;
+        public Guid UserID { get; set; }
         string employeeType;
-        LoginForm loginForm = new LoginForm();
+        
+        Handlers handlers = new();
         public  MenuForm()
         {
             InitializeComponent();
@@ -23,24 +24,44 @@ namespace Fuel_Station.WF
 
         private async void MenuForm_Load(object sender, EventArgs e)
         {
-            loginForm = new LoginForm();
-            var z = await loginForm.GetEmployee(UserID);
-            employeeType = loginForm.EmployeeTypeString(z);
+            
+            var z = await handlers.GetEmployee(UserID);
+            employeeType = handlers.EmployeeTypeString(z);
         }
 
         private async void customersToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
 
-            if (employeeType=="Manager"|| employeeType=="Cashier")
+            if (employeeType=="Manager"|| employeeType=="Cashier")//na balo handler
             {
 
                 CustomersForm f = new CustomersForm();
                 f.UserID = UserID;
                 f.ShowDialog();
             }
+            else
+            {
+                MessageBox.Show("You are not authorized to view Customers");
+            }
 
            
+
+        }
+
+        private void transactionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (employeeType == "Manager" || employeeType == "Cashier")
+            {
+                TransactionForm f = new TransactionForm();
+                f.UserID = UserID;
+                f.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("You are not authorized to view Transactions");
+            }
+
 
         }
     }

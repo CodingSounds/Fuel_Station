@@ -21,12 +21,12 @@ namespace Fuel_Station.WF
 {
     public partial class CustomersForm : Form
     {
-        public Guid UserID;
+        public Guid UserID { get; set; }
         public string customerListString;
 
-        public List<CustomerViewModel> customerList;
+        public List<CustomerViewModel> customerList { get; set; }
 
-        public LoginForm loginForm=new LoginForm();
+        Handlers handlers = new();
 
         public List<CustomerViewModel> customerViewModels = new();
         public CustomersForm()
@@ -36,34 +36,30 @@ namespace Fuel_Station.WF
 
         private async void CustomersForm_Load(object sender, EventArgs e)
         {
-            int? employee = await loginForm.GetEmployee(UserID);
 
-            if(employee == null)
-            {
-                Close();
-            };
-            
-
-
-            string employeeType = loginForm.EmployeeTypeString(employee);
-            if(employeeType =="None"|| employeeType == "Staff")
-            {
-                MessageBox.Show("You are not eligible to continue");
-                Close();
-            }
-
-            customerList= await LoadingCustomerList(UserID);
-
+            LoadCustomers();
             SetDataBindings();
-
-
-
-
+            
+             gridView1.OptionsBehavior.Editable=false;//??
 
 
 
         }
-        private async Task<List<CustomerViewModel>> LoadingCustomerList(Guid id)
+
+        private async void LoadCustomers()
+        {
+            int? employee = await handlers.GetEmployee(UserID);
+
+            if (employee == null)
+            {
+                Close();
+            };
+
+            handlers.LoginConfirmation(employee.Value, this);//this will close the form if you are not the correct user
+
+            customerList = await handlers.LoadingCustomerList(UserID);
+        }
+      /*  private async Task<List<CustomerViewModel>> LoadingCustomerList(Guid id)
         {
             using var client = new HttpClient();
 
@@ -75,16 +71,17 @@ namespace Fuel_Station.WF
 
 
         }
-        private async void LoginConfirmation(EmployeeController employeeController)
+        public async void LoginConfirmation(int employee)
         {
-            var type = await employeeController.GetEmployeeType(UserID);
-            if (type == EmployeeTypeEnum.Manager || type == EmployeeTypeEnum.Cashier)
+            string employeeType = handlers.EmployeeTypeString(employee);
+            if (employeeType == "None" || employeeType == "Staff")
             {
-
+                MessageBox.Show("You are not eligible to continue");
+                Close();
             }
-            
 
-        }
+
+        }*/
 
 
         private void SetDataBindings()

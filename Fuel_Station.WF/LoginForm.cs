@@ -22,7 +22,7 @@ namespace Fuel_Station.WF
     public partial class LoginForm : Form
     {
 
-        
+        Handlers handler = new();
         public LoginForm()
         {
             InitializeComponent();
@@ -46,14 +46,14 @@ namespace Fuel_Station.WF
 
             if(guidEMployee != null)
             {
-                employee = await GetEmployee(guidEMployee.Value);
+                employee = await handler.GetEmployee(guidEMployee.Value);
                 
             }
            
            
 
            
-            if (EmployeeTypeString(employee) != "None")
+            if (handler.EmployeeTypeString(employee) != "None")
             {
 
 
@@ -93,7 +93,7 @@ namespace Fuel_Station.WF
            
         }
 
-        public async Task<int?>GetEmployee(Guid id)
+       /* public async Task<int?>GetEmployee(Guid id)
         {
             using var client = new HttpClient();
             var content = await client.GetStringAsync($"https://localhost:7009/Employee/GetTypeOfEmpl{id}");
@@ -111,6 +111,6 @@ namespace Fuel_Station.WF
         public string EmployeeTypeString(int? employeetype)
         {
             return ((EmployeeValueEnum)employeetype).ToString();
-        }
+        }*/
     }
 }
