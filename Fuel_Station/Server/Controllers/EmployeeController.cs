@@ -110,6 +110,20 @@ namespace Fuel_Station.Server.Controllers
             return t;
         }
 
+
+        [HttpGet("GetTypeOfEmpl{user}")]
+        public async Task<EmployeeTypeEnum> GetEmployeeType(Guid user)//to exo xrisimopoiisi mono sto wf mexri stigmis
+        {
+
+            var type = await _employeeRepo.GetByIdAsync(user);
+            if (type == null)
+            {
+                return EmployeeTypeEnum.None;
+            }
+            return type.EmployeeType;
+        }
+
+
         [HttpPost]
 
         public async Task Post(EmployeeViewModel newEmployeeView)

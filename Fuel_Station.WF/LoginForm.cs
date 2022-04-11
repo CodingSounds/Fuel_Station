@@ -1,14 +1,18 @@
 ﻿using Fuel_Station.Server.Controllers;
 using FuelStation.EF.Context;
 using FuelStation.EF.Repositories;
+using FuelStation.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +21,8 @@ namespace Fuel_Station.WF
 {
     public partial class LoginForm : Form
     {
+
+        
         public LoginForm()
         {
             InitializeComponent();
@@ -31,17 +37,40 @@ namespace Fuel_Station.WF
         {
             string username;
             string password;
-           username=txtUsername.Text;
+            int? employee = 0;
+
+            username =txtUsername.Text;
            password=txtPassword.Text;
-            var login = await Login(password, username);
-            if (login != null){
+
+            var guidEMployee = await GetID(password, username);
+
+            if(guidEMployee != null)
+            {
+                employee = await GetEmployee(guidEMployee.Value);
                 
+            }
+           
+           
+
+           
+            if (EmployeeTypeString(employee) != "None")
+            {
+
 
 
                 var f = new MenuForm();
-                f.UserID = login.Value;
+                f.UserID = guidEMployee.Value;
                 f.Show();
                 this.Hide();
+
+
+
+                
+
+            }
+            else
+            {
+                MessageBox.Show("You entered wrong username or password");
 
             }
 
@@ -49,24 +78,39 @@ namespace Fuel_Station.WF
 
         }
 
-        private async Task<Guid?> Login(string password, string username)
+        private async Task<Guid?> GetID(string password, string username)
         {
-            FuelStationContext fuelStationContext = new();
-            //CustomerRepo customerRepo = new(fuelStationContext);
-            EmployeeRepo employee=new(fuelStationContext);
-            EmployeeController employeeController = new EmployeeController(employee);
-            //findblblb
-            var ID =await  employeeController.LoginGet(username, password);
-            return ID;
+            
+            using var client = new HttpClient();
+            var id= await client.GetStringAsync($"https://localhost:7009/Employee/GetUser{username}/{password}");
+            if (id != null)
+            {
+                var t = id.Replace('"', ' ');
+                Guid idGuid = Guid.Parse(t);
+                return idGuid;
+            }
+            return null;
+           
+        }
+
+        public async Task<int?>GetEmployee(Guid id)
+        {
+            using var client = new HttpClient();
+            var content = await client.GetStringAsync($"https://localhost:7009/Employee/GetTypeOfEmpl{id}");
+
+            if(content != null)
+            {
+
+                int employeeType = Convert.ToInt32(content);
+                return employeeType;
+            }
+            return null;
 
 
-
-
-
-
-
-
-
+        }
+        public string EmployeeTypeString(int? employeetype)
+        {
+            return ((EmployeeValueEnum)employeetype).ToString();
         }
     }
 }

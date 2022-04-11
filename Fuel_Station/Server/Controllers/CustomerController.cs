@@ -20,24 +20,31 @@ namespace Fuel_Station.Server.Controllers
             _employeeRepo = employeeRepo;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<CustomerViewModel>> Get()
+        [HttpGet("{user}")]
+        public async Task<IEnumerable<CustomerViewModel>> Get(Guid user)
         {
             var result = await _customerRepo.GetAllAsync();
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
 
-            var activecustomers = result.FindAll(x => x.Status == true);
-            var t = activecustomers.Select(x => new CustomerViewModel
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager || userEmploy.EmployeeType == EmployeeTypeEnum.Cashier)
             {
-                ID = x.ID,
-                Name = x.Name,
-                Surname = x.Surname,
-                CardNumber = x.CardNumber,
-                Status = x.Status.Value
-                
 
-            });
+                var activecustomers = result.FindAll(x => x.Status == true);
+                var t = activecustomers.Select(x => new CustomerViewModel
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    CardNumber = x.CardNumber,
+                    Status = x.Status.Value
 
-            return t;
+
+                });
+
+                return t;
+            }
+            return null;
+
         }
         [HttpGet("GetAllCust{user}")]
         public async Task<IEnumerable<CustomerViewModel>> GetAll(Guid user)
@@ -45,7 +52,7 @@ namespace Fuel_Station.Server.Controllers
             var result = await _customerRepo.GetAllAsync();
             var userEmploy = await _employeeRepo.GetByIdAsync(user);
 
-            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager)
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager|| userEmploy.EmployeeType == EmployeeTypeEnum.Cashier)
             {
                 var notErasedCustomers = result.FindAll(x => x.Status != null);
 

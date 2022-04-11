@@ -13,4 +13,12 @@ namespace FuelStation.Models.Enums
         Staff,
         Cashier
     }
+
+    public enum EmployeeValueEnum
+    {
+        None=0,
+        Manager=1,
+        Staff=2,
+        Cashier=3
+    }
 }

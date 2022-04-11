@@ -13,13 +13,34 @@ namespace Fuel_Station.WF
     public partial class MenuForm : Form
     {
         public Guid UserID;
-        public MenuForm()
+        string employeeType;
+        LoginForm loginForm = new LoginForm();
+        public  MenuForm()
         {
             InitializeComponent();
+            
         }
 
-        private void MenuForm_Load(object sender, EventArgs e)
+        private async void MenuForm_Load(object sender, EventArgs e)
         {
+            loginForm = new LoginForm();
+            var z = await loginForm.GetEmployee(UserID);
+            employeeType = loginForm.EmployeeTypeString(z);
+        }
+
+        private async void customersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+
+            if (employeeType=="Manager"|| employeeType=="Cashier")
+            {
+
+                CustomersForm f = new CustomersForm();
+                f.UserID = UserID;
+                f.ShowDialog();
+            }
+
+           
 
         }
     }
