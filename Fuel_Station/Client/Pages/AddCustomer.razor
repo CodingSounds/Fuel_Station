@@ -101,12 +101,12 @@
 
         if (ID == null)
         {
-            await httpClient.PostAsJsonAsync("Customer", customerview);
+            await httpClient.PostAsJsonAsync($"Customer/{User.Value}", customerview);
         }
         else
         {
             customerview.ID = ID.Value;
-            await httpClient.PutAsJsonAsync("Customer", customerview);
+            await httpClient.PutAsJsonAsync($"Customer/{User.Value}", customerview);
 
         }
 

@@ -94,9 +94,10 @@ namespace Fuel_Station.WF
         {
 
             var f = new NewCustomerForm();
-            f.formCustomer = this;
+           /* f.formCustomer = this;*/
             f.UserID = UserID;
             f.ShowDialog();
+            RefreshData();
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -106,9 +107,11 @@ namespace Fuel_Station.WF
                 var f = new NewCustomerForm();
                 f.UserID = UserID;
                 f.editCustomerID = GetCustomerFromGrid().ID;
-                f.formCustomer = this;
+                /*f.formCustomer = this;*/
 
                 f.ShowDialog();
+
+                RefreshData();
             }
             else
             {
@@ -123,6 +126,7 @@ namespace Fuel_Station.WF
             var customerView = gridView1.GetRow(index) as CustomerViewModel;
             return customerView;
         }
+       
 
         private bool CheckIfNull()
         {
@@ -133,6 +137,32 @@ namespace Fuel_Station.WF
         private void btnCLose_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private async  void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (CheckIfNull())
+            {
+               
+               var deleteID= GetCustomerFromGrid().ID;
+                var nothing=await handlers.DeleteCustomer(UserID,deleteID);
+
+
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show("Invalid operation. Can not edit customer that does not exist");
+            }
+            
+
+        }
+
+        private async void RefreshData()
+        {
+            customerList = await handlers.LoadingCustomerList(UserID);
+            SetDataBindings();
+            gridView1.RefreshData();
         }
     }
 }

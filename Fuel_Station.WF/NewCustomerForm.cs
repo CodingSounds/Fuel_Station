@@ -22,7 +22,7 @@ namespace Fuel_Station.WF
         public CustomersForm customerForm = new CustomersForm();
 
         Handlers handlers = new();
-        public CustomersForm formCustomer { get; set; }//kalo practise???
+        /*public CustomersForm formCustomer { get; set; }//kalo practise???*/
         public Guid UserID { get; set; }
         public Guid? editCustomerID { get; set; }=null;
       
@@ -72,7 +72,7 @@ namespace Fuel_Station.WF
             Close();
         }
 
-        private async void simpleButton1_Click(object sender, EventArgs e)//SaveButton
+        private async void btnSave_Click(object sender, EventArgs e)//SaveButton
         {
             var newcustomer=new CustomerViewModel();
             if (CardValidation(txtCardNumber.Text))
@@ -92,7 +92,7 @@ namespace Fuel_Station.WF
                     newcustomer.ID = editCustomerID.Value;
                     await client.PutAsJsonAsync($"https://localhost:7009/Customer/{UserID}", newcustomer);
                 }
-                formCustomer.gridView1.RefreshData();//kalo practice?????/ giati den douleuei
+               /* formCustomer.gridView1.RefreshData();//kalo practice?????/ giati den douleuei*/
                 Close();
 /*
                 var content = new FormUrlEncodedContent(newcustomer);

@@ -65,7 +65,7 @@ namespace Fuel_Station.WF
         {
             using var client = new HttpClient();
 
-            var itemListString = await client.GetStringAsync($"https://localhost:7009/Item/GetAllItems{ id}");
+            var itemListString = await client.GetStringAsync($"https://localhost:7009/Item/{id}");
             var itemList = JsonConvert.DeserializeObject<List<ItemViewModel>>(itemListString);
 
             return itemList;
@@ -122,10 +122,24 @@ namespace Fuel_Station.WF
             return customer;
 
         }
-        public async Task<ItemViewModel> GetItem(Guid id)
+        public async Task<int> DeleteCustomer(Guid UserID, Guid customerID)
         {
             using var client = new HttpClient();
-            var content = await client.GetStringAsync($"https://localhost:7009/Customer/{id}");
+            await client.DeleteAsync($"https://localhost:7009/Customer/{UserID}/{customerID}");
+            return 0;
+
+        }
+        public async Task<int> DeleteItem(Guid UserID, Guid customerID)
+        {
+            using var client = new HttpClient();
+            await client.DeleteAsync($"https://localhost:7009/Item/{UserID}/{customerID}");
+            return 0;
+
+        }
+        public async Task<ItemViewModel> GetItem(Guid UserID, Guid itemID)
+        {
+            using var client = new HttpClient();
+            var content = await client.GetStringAsync($"https://localhost:7009/Item/GetOneItem{UserID}/{itemID}");
             var item = JsonConvert.DeserializeObject<ItemViewModel>(content);
             if (!(content != "" && content.Substring(0, 9) != "<!DOCTYPE"))//fixxxxxxxxxxxx it
             {

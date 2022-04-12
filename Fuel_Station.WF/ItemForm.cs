@@ -15,15 +15,17 @@ namespace Fuel_Station.WF
     {
         public Guid UserID;
         Handlers handlers = new();
-        ItemViewModel itemLIst = new ItemViewModel();
+        List<ItemViewModel> itemLIst = new();
+
+
         public ItemForm()
         {
             InitializeComponent();
         }
 
-        private void ItemForm_Load(object sender, EventArgs e)
+        private async void ItemForm_Load(object sender, EventArgs e)
         {
-            LoadItems(UserID);
+            await LoadItems(UserID);
             SetDataBindings();
             gridViewItems.OptionsBehavior.Editable = false;
         }
@@ -34,7 +36,8 @@ namespace Fuel_Station.WF
 
             handlers.LoginConfirmationItems(employee.Value, this);//this will close the form if you are not the correct user
 
-            var itemLIst = await handlers.LoadingItemList(UserID);
+            itemLIst = await handlers.LoadingItemList(UserID);
+
         }
         private void SetDataBindings()
         {
@@ -46,5 +49,76 @@ namespace Fuel_Station.WF
 
 
         }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            var f = new NewItemForm();
+            /* f.formCustomer = this;*/
+            f.UserID = UserID;
+            f.ShowDialog();
+            RefreshData();
+        }
+
+        private async void RefreshData()
+        {
+            itemLIst = await handlers.LoadingItemList(UserID);
+            SetDataBindings();
+            gridViewItems.RefreshData();
+        }
+
+        private async void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (CheckIfNull())
+            {
+
+                var deleteID = GetItemFromGrid().ID;
+                var nothing = await handlers.DeleteItem(UserID, deleteID);
+
+
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show("Invalid operation. Can not edit customer that does not exist");
+            }
+        }
+
+        private bool CheckIfNull()
+        {
+            var x = gridViewItems.RowCount;
+            return x > 0;
+        }
+        private ItemViewModel GetItemFromGrid()//an exoume 0?
+        {
+            int index = gridViewItems.FocusedRowHandle;
+
+            var itemView = gridViewItems.GetRow(index) as ItemViewModel;
+            return itemView;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (CheckIfNull())
+            {
+                var f = new NewItemForm();
+                f.UserID = UserID;
+                f.editItemID = GetItemFromGrid().ID;
+                
+
+                f.ShowDialog();
+
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show("Invalid operation. Can not edit customer that does not exist");
+            }
+        }
     }
+
 }

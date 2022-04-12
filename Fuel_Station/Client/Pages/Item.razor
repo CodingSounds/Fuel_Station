@@ -97,13 +97,13 @@ else{
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
-        await LoadItemsFromServer();
+        await LoadItemsFromServer(User.Value);
         isLoading = false;
     }
 
-    private async Task LoadItemsFromServer()
+    private async Task LoadItemsFromServer(Guid id)
     {
-        Itemlist = await httpClient.GetFromJsonAsync<List<ItemViewModel>>($"Item/GetAllItems{User.Value}");
+        Itemlist = await httpClient.GetFromJsonAsync<List<ItemViewModel>>($"Item/GetAllItems{id}");
     }
 
     async Task AddItem(ItemViewModel item)
@@ -138,9 +138,9 @@ else{
         //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
         if (true)
         {
-            var response = await httpClient.DeleteAsync($"Item/{item.ID}");
+            var response = await httpClient.DeleteAsync($"Item/{User.Value}/{item.ID}");
             response.EnsureSuccessStatusCode();
-            await LoadItemsFromServer();
+            await LoadItemsFromServer(User.Value);
         }
     }
       async Task EraseItem(ItemViewModel item)
@@ -152,7 +152,7 @@ else{
             var response = await httpClient.DeleteAsync($"Item/Erase{item.ID}");
 
             response.EnsureSuccessStatusCode();
-            await LoadItemsFromServer();
+            await LoadItemsFromServer(User.Value);
         }
     }
 
@@ -160,7 +160,7 @@ else{
     private void DeletedorActiveItems()
     {
         ActiveItems = !ActiveItems;
-        LoadItemsFromServer();
+        LoadItemsFromServer(User.Value);
     }
    
     private string DeletedItems()

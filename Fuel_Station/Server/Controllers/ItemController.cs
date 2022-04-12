@@ -20,27 +20,40 @@ namespace Fuel_Station.Server.Controllers
             _employeeRepo = employeeRepo;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<ItemViewModel>> Get()
+        [HttpGet("{user}")]
+        public async Task<IEnumerable<ItemViewModel>> Get(Guid user)
         {
-            var result = await _ItemRepo.GetAllAsync();
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
 
-            var activeItems = result.FindAll(x => x.Status == true);
-            var t = activeItems.Select(x => new ItemViewModel
+
+
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager || userEmploy.EmployeeType == EmployeeTypeEnum.Staff)
             {
-                ID = x.ID,
-                Code = x.Code,
-                Price = x.Price,
-                Description = x.Description,
-                Status = x.Status.Value,
-                ItemType=x.ItemType,
-                Cost = x.Cost
+                var result = await _ItemRepo.GetAllAsync();
+
+                var activeItems = result.FindAll(x => x.Status == true);
+                var t = activeItems.Select(x => new ItemViewModel
+                {
+                    ID = x.ID,
+                    Code = x.Code,
+                    Price = x.Price,
+                    Description = x.Description,
+                    Status = x.Status.Value,
+                    ItemType = x.ItemType,
+                    Cost = x.Cost
 
 
-            });
+                });
 
-            return t;
-        }
+                return t;
+            }
+            else
+            {
+                return null;
+            }
+
+
+            }
         [HttpGet("GetAllItems{user}")]
         public async Task<IEnumerable<ItemViewModel>> GetAll(Guid user)
         {
@@ -100,32 +113,50 @@ namespace Fuel_Station.Server.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
 
-        public async Task Post(ItemViewModel itemViewModel)
+        public async Task Post(Guid id,ItemViewModel itemViewModel)
         {
-            Item item = new Item
-            {
-                ID = itemViewModel.ID,
-                Code = itemViewModel.Code,
-                Price = itemViewModel.Price,
-                Description = itemViewModel.Description,
 
-                ItemType = itemViewModel.ItemType,
-                Cost = itemViewModel.Cost,
-                Status = true
-            };
-            await _ItemRepo.CreateAsync(item);
+
+            var type = await _employeeRepo.GetByIdAsync(id);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Staff))
+            {
+
+            }
+            else
+            {
+                Item item = new Item
+                {
+                    ID = itemViewModel.ID,
+                    Code = itemViewModel.Code,
+                    Price = itemViewModel.Price,
+                    Description = itemViewModel.Description,
+
+                    ItemType = itemViewModel.ItemType,
+                    Cost = itemViewModel.Cost,
+                    Status = true
+                };
+                await _ItemRepo.CreateAsync(item);
+            }
 
         }
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{user}/{id}")]
+        public async Task Delete(Guid user, Guid id)
         {
+            var type = await _employeeRepo.GetByIdAsync(user);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
 
-            var x = await _ItemRepo.GetByIdAsync(id);
-            x.Status = !x.Status;
-            await _ItemRepo.UpdateAsync(id, x);
+            }
+            else
+            {
+
+                var x = await _ItemRepo.GetByIdAsync(id);
+                x.Status = !x.Status;
+                await _ItemRepo.UpdateAsync(id, x);
+            }
         }
         [HttpDelete("Erase{id}")]
         public async Task Erase(Guid id)
@@ -144,31 +175,40 @@ namespace Fuel_Station.Server.Controllers
                 Status = null
             };
 
-            await _ItemRepo.DeleteAsync(id);
-            await _ItemRepo.CreateAsync(item);
+            await _ItemRepo.UpdateAsync(id, item);
+            
         }
 
 
 
-        [HttpPut]
-        public async Task<ActionResult> Put(ItemViewModel itemViewModel)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(Guid id,ItemViewModel itemViewModel)
         {
             var itemtupdate = await _ItemRepo.GetByIdAsync(itemViewModel.ID);
             if (itemtupdate == null) return NotFound();
 
 
-            itemtupdate.Price = itemViewModel.Price;
-            itemtupdate.Code = itemViewModel.Code;
-            itemtupdate.Description = itemViewModel.Description;
-            itemtupdate.Cost = itemViewModel.Cost;
-            itemtupdate.Status = itemViewModel.Status;
-            itemtupdate.ItemType = itemViewModel.ItemType;
+            var type = await _employeeRepo.GetByIdAsync(id);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
+                return NotFound();
+            }
+            else
+            {
+                itemtupdate.Price = itemViewModel.Price;
+                itemtupdate.Code = itemViewModel.Code;
+                itemtupdate.Description = itemViewModel.Description;
+                itemtupdate.Cost = itemViewModel.Cost;
+                itemtupdate.Status = itemViewModel.Status;
+                itemtupdate.ItemType = itemViewModel.ItemType;
 
-            await _ItemRepo.UpdateAsync(itemViewModel.ID, itemtupdate);
+                await _ItemRepo.UpdateAsync(itemViewModel.ID, itemtupdate);
 
 
+            }
 
-            return Ok();
+
+                return Ok();
         }
 
 

@@ -45,7 +45,7 @@ namespace FuelStation.EF.Repositories
             foundEmployee.Name = entity.Name;
             foundEmployee.Surname = entity.Surname;
             foundEmployee.SalaryPerMonth = entity.SalaryPerMonth;
-            foundEmployee.Status = entity.Status.Value;
+            foundEmployee.Status = entity.Status;
             foundEmployee.EmployeeType = entity.EmployeeType;
             foundEmployee.HireDateEnd = entity.HireDateEnd;//bori na einai null SOS
             foundEmployee.HireDateStart = entity.HireDateStart;

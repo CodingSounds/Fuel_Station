@@ -44,12 +44,12 @@ else{
                     @if (ActiveCustomers)
                     {
                         <td><button class="btn btn-success" @onclick="()=>AddCustomer(customer)" >Edit</button></td>
-                        <td><button class="btn btn-danger" @onclick="() => DeleteCustomer(customer)">Delete</button></td>
+                        <td><button class="btn btn-danger" @onclick="() => DeleteCustomer(User,customer)">Delete</button></td>
                     }
                     else
                     {
                         
-                        <td><button class="btn btn-danger" @onclick="() => DeleteCustomer(customer)">Undo</button></td>
+                        <td><button class="btn btn-danger" @onclick="() => DeleteCustomer(User,customer)">Undo</button></td>
                         <td><button class="btn btn-dark" @onclick="() => EraseCustomer(customer)">Erase</button></td>
                     }
 
@@ -137,13 +137,13 @@ else{
     {
         customer.Status = !customer.Status;
     }
-    async Task  DeleteCustomer(CustomerViewModel customer)
+    async Task  DeleteCustomer(Guid? User,CustomerViewModel customer)
     {
         //var confirm = await jsRuntime.InvokeAsync<bool>("confirmationJS", null);
         //var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
         if (true)
         {
-            var response = await httpClient.DeleteAsync($"Customer/{customer.ID}");
+            var response = await httpClient.DeleteAsync($"Customer/{User.Value}/{customer.ID}");
             response.EnsureSuccessStatusCode();
             await LoadCustomersFromServer(User.Value);
         }

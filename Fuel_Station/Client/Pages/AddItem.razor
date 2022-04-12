@@ -143,12 +143,12 @@
 
         if (ID == null)
         {
-            await httpClient.PostAsJsonAsync("Item", itemView);
+            await httpClient.PostAsJsonAsync($"Item/{User.Value}", itemView);
         }
         else
         {
             itemView.ID = ID.Value;
-            await httpClient.PutAsJsonAsync("Item", itemView);
+            await httpClient.PutAsJsonAsync($"Item/{User.Value}", itemView);
 
         }
 

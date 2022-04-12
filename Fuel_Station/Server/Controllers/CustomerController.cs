@@ -126,17 +126,27 @@ namespace Fuel_Station.Server.Controllers
            
         }
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{user}/{id}")]
+        public async Task Delete(Guid user, Guid id)
         {
+            var type = await _employeeRepo.GetByIdAsync(user);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
 
-            var x = await _customerRepo.GetByIdAsync(id);
-            x.Status = !x.Status;
-            await _customerRepo.UpdateAsync(id, x);
+            }
+            else
+            {
+                var x = await _customerRepo.GetByIdAsync(id);
+                x.Status = !x.Status;
+                await _customerRepo.UpdateAsync(id, x);
+            }
+
+          
         }
         [HttpDelete("Erase{id}")]
         public async Task Erase(Guid id)
         {
+
 
             var result = await _customerRepo.GetByIdAsync(id);
             var t = new Customer
@@ -149,13 +159,14 @@ namespace Fuel_Station.Server.Controllers
 
             };
 
-            await _customerRepo.DeleteAsync(id);
-            await _customerRepo.CreateAsync(t);
+            await _customerRepo.UpdateAsync(id, t);
+           
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(Guid id,CustomerViewModel newcustomerview)
         {
+
             var customertoupdate = await _customerRepo.GetByIdAsync(newcustomerview.ID);
             if (customertoupdate == null) return NotFound();
 

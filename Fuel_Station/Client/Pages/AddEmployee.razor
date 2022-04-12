@@ -133,12 +133,12 @@
 
         if (ID == null)
         {
-            await httpClient.PostAsJsonAsync("Employee", employeeView);
+            await httpClient.PostAsJsonAsync($"Employee/{User.Value}", employeeView);
         }
         else
         {
             employeeView.ID = ID.Value;
-            await httpClient.PutAsJsonAsync("Employee", employeeView);
+            await httpClient.PutAsJsonAsync($"Employee/{User.Value}", employeeView);
 
         }
 

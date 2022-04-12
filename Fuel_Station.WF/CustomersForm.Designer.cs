@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            this.btnCLose = new DevExpress.XtraEditors.SimpleButton();
             this.btnDelete = new DevExpress.XtraEditors.SimpleButton();
             this.btnEdit = new DevExpress.XtraEditors.SimpleButton();
             this.btnNew = new DevExpress.XtraEditors.SimpleButton();
@@ -42,7 +43,6 @@
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.btnCLose = new DevExpress.XtraEditors.SimpleButton();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
@@ -71,6 +71,18 @@
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
+            // btnCLose
+            // 
+            this.btnCLose.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnCLose.Appearance.Options.UseFont = true;
+            this.btnCLose.Location = new System.Drawing.Point(402, 409);
+            this.btnCLose.Name = "btnCLose";
+            this.btnCLose.Size = new System.Drawing.Size(386, 29);
+            this.btnCLose.StyleController = this.layoutControl1;
+            this.btnCLose.TabIndex = 8;
+            this.btnCLose.Text = "Close";
+            this.btnCLose.Click += new System.EventHandler(this.btnCLose_Click);
+            // 
             // btnDelete
             // 
             this.btnDelete.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -81,6 +93,7 @@
             this.btnDelete.StyleController = this.layoutControl1;
             this.btnDelete.TabIndex = 7;
             this.btnDelete.Text = "Delete";
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnEdit
             // 
@@ -204,18 +217,6 @@
             this.layoutControlItem4.Size = new System.Drawing.Size(390, 33);
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
-            // 
-            // btnCLose
-            // 
-            this.btnCLose.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnCLose.Appearance.Options.UseFont = true;
-            this.btnCLose.Location = new System.Drawing.Point(402, 409);
-            this.btnCLose.Name = "btnCLose";
-            this.btnCLose.Size = new System.Drawing.Size(386, 29);
-            this.btnCLose.StyleController = this.layoutControl1;
-            this.btnCLose.TabIndex = 8;
-            this.btnCLose.Text = "Close";
-            this.btnCLose.Click += new System.EventHandler(this.btnCLose_Click);
             // 
             // layoutControlItem5
             // 

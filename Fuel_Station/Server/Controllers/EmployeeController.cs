@@ -124,34 +124,52 @@ namespace Fuel_Station.Server.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("{id}")]
 
-        public async Task Post(EmployeeViewModel newEmployeeView)
+        public async Task Post(Guid id,EmployeeViewModel newEmployeeView)
         {
-            Employee employee = new Employee
+            var type = await _employeeRepo.GetByIdAsync(id);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
             {
 
-                ID = Guid.NewGuid(),
-                Name = newEmployeeView.Name,
-                Surname=newEmployeeView.Surname,
-                HireDateStart = newEmployeeView.HireDateStart,
-                HireDateEnd = newEmployeeView.HireDateEnd,
-                SalaryPerMonth= newEmployeeView.SalaryPerMonth,
-                EmployeeType=newEmployeeView.EmployeeType,
+            }
+            else
+            {
+                Employee employee = new Employee
+                {
 
-                Status = true,
-            };
-            await _employeeRepo.CreateAsync(employee);
+                    ID = Guid.NewGuid(),
+                    Name = newEmployeeView.Name,
+                    Surname = newEmployeeView.Surname,
+                    HireDateStart = newEmployeeView.HireDateStart,
+                    HireDateEnd = newEmployeeView.HireDateEnd,
+                    SalaryPerMonth = newEmployeeView.SalaryPerMonth,
+                    EmployeeType = newEmployeeView.EmployeeType,
+
+                    Status = true,
+                };
+                await _employeeRepo.CreateAsync(employee);
+            }
+            
 
         }
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{user}/{id}")]
+        public async Task Delete(Guid user,Guid id)
         {
+            var type = await _employeeRepo.GetByIdAsync(user);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager ))
+            {
 
-            var x = await _employeeRepo.GetByIdAsync(id);
-            x.Status = !x.Status;
-            await _employeeRepo.UpdateAsync(id, x);
+            }
+            else
+            {
+                var x = await _employeeRepo.GetByIdAsync(id);
+                x.Status = !x.Status;
+                await _employeeRepo.UpdateAsync(id, x);
+            }
+
+         
         }
         [HttpDelete("Erase{id}")]
         public async Task Erase(Guid id)
@@ -173,28 +191,39 @@ namespace Fuel_Station.Server.Controllers
                 
             };
 
-            await _employeeRepo.DeleteAsync(id);
-            await _employeeRepo.CreateAsync(employee);
+            await _employeeRepo.UpdateAsync(id, employee);
+          
         }
 
 
-        [HttpPut]
-        public async Task<ActionResult> Put(EmployeeViewModel newEmployeeView)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(Guid id,EmployeeViewModel newEmployeeView)
         {
             var employeeToUpdate = await _employeeRepo.GetByIdAsync(newEmployeeView.ID);
             if (employeeToUpdate == null) return NotFound();
 
+            var type = await _employeeRepo.GetByIdAsync(id);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
+                return NotFound();
+            }
+            else
+            {
 
-            employeeToUpdate.ID = newEmployeeView.ID;
-            employeeToUpdate.Name = newEmployeeView.Name;
-            employeeToUpdate.Surname = newEmployeeView.Surname;
-            employeeToUpdate.HireDateStart = newEmployeeView.HireDateStart;
-            employeeToUpdate.HireDateEnd = newEmployeeView.HireDateEnd;
-            employeeToUpdate.SalaryPerMonth = newEmployeeView.SalaryPerMonth;
-            employeeToUpdate.EmployeeType = newEmployeeView.EmployeeType;
-            employeeToUpdate.Status = newEmployeeView.Status;
+                employeeToUpdate.ID = newEmployeeView.ID;
+                employeeToUpdate.Name = newEmployeeView.Name;
+                employeeToUpdate.Surname = newEmployeeView.Surname;
+                employeeToUpdate.HireDateStart = newEmployeeView.HireDateStart;
+                employeeToUpdate.HireDateEnd = newEmployeeView.HireDateEnd;
+                employeeToUpdate.SalaryPerMonth = newEmployeeView.SalaryPerMonth;
+                employeeToUpdate.EmployeeType = newEmployeeView.EmployeeType;
+                employeeToUpdate.Status = newEmployeeView.Status;
 
-            await _employeeRepo.UpdateAsync(newEmployeeView.ID, employeeToUpdate);
+                await _employeeRepo.UpdateAsync(newEmployeeView.ID, employeeToUpdate);
+            }
+
+
+
 
 
 
