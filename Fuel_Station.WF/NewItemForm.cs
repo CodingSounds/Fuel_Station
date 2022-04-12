@@ -33,7 +33,7 @@ namespace Fuel_Station.WF
 
         private async void NewItem_Load(object sender, EventArgs e)
         {
-            int? employee = await handlers.LoadEmployeee(UserID, this);
+            int? employee = await handlers.LoadEmployeeeTypeToInt(UserID, this);
 
             handlers.LoginConfirmationItems(employee.Value, this);//danger cannot await
 

@@ -73,7 +73,7 @@ namespace Fuel_Station.WF
 
             if (guidEMployee != null)
             {
-                var employee = await handler.GetEmployee(guidEMployee.Value);
+                var employee = await handler.GetEmployeeTypeToInt(guidEMployee.Value);
 
                 return employee.Value;
             }

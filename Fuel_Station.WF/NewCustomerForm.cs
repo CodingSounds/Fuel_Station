@@ -25,7 +25,10 @@ namespace Fuel_Station.WF
         /*public CustomersForm formCustomer { get; set; }//kalo practise???*/
         public Guid UserID { get; set; }
         public Guid? editCustomerID { get; set; }=null;
-      
+
+        public string cardNumberCreate { get; set; }
+
+
         public NewCustomerForm()
         {
             InitializeComponent();
@@ -33,7 +36,7 @@ namespace Fuel_Station.WF
 
         private async  void NewCustomerForm_Load(object sender, EventArgs e)
         {
-            int? employee = await handlers.LoadEmployeee(UserID, this);
+            int? employee = await handlers.LoadEmployeeeTypeToInt(UserID, this);
 
          
 
@@ -51,6 +54,12 @@ namespace Fuel_Station.WF
 
         private async void EditCustomer(Guid? editCustomerID)
         {
+            if (cardNumberCreate != null)
+            {
+                txtCardNumber.Text = cardNumberCreate;
+                txtCardNumber.ReadOnly = true;
+            }
+                
             if (editCustomerID == null)
             {
                 
@@ -92,7 +101,9 @@ namespace Fuel_Station.WF
                     newcustomer.ID = editCustomerID.Value;
                     await client.PutAsJsonAsync($"https://localhost:7009/Customer/{UserID}", newcustomer);
                 }
-               /* formCustomer.gridView1.RefreshData();//kalo practice?????/ giati den douleuei*/
+
+                
+
                 Close();
 /*
                 var content = new FormUrlEncodedContent(newcustomer);

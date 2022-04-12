@@ -75,9 +75,21 @@ namespace Fuel_Station.WF
 
         }
 
-      /* private void gridTransaction_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
- 
-        }*/
+            Close();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            NewTransactionForm f = new();
+            f.UserID = UserID;
+            f.ShowDialog();
+        }
+
+        /* private void gridTransaction_Click(object sender, EventArgs e)
+          {
+
+          }*/
     }
 }

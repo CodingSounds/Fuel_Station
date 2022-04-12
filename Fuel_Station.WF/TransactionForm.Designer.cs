@@ -46,6 +46,10 @@
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.btnAdd = new DevExpress.XtraEditors.SimpleButton();
+            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.btnClose = new DevExpress.XtraEditors.SimpleButton();
+            this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).BeginInit();
@@ -55,10 +59,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
             // 
+            this.layoutControl1.Controls.Add(this.btnClose);
+            this.layoutControl1.Controls.Add(this.btnAdd);
             this.layoutControl1.Controls.Add(this.gridTransactionLines);
             this.layoutControl1.Controls.Add(this.gridTransaction);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -74,7 +82,7 @@
             this.gridTransactionLines.Location = new System.Drawing.Point(12, 239);
             this.gridTransactionLines.MainView = this.gridViewTransactionLines;
             this.gridTransactionLines.Name = "gridTransactionLines";
-            this.gridTransactionLines.Size = new System.Drawing.Size(776, 199);
+            this.gridTransactionLines.Size = new System.Drawing.Size(776, 166);
             this.gridTransactionLines.TabIndex = 5;
             this.gridTransactionLines.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewTransactionLines});
@@ -171,7 +179,6 @@
             this.gridTransaction.TabIndex = 4;
             this.gridTransaction.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewTransaction});
-            //this.gridTransaction.Click += new System.EventHandler(this.gridTransaction_Click);
             // 
             // gridViewTransaction
             // 
@@ -219,7 +226,9 @@
             this.Root.GroupBordersVisible = false;
             this.Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem1,
-            this.layoutControlItem2});
+            this.layoutControlItem2,
+            this.layoutControlItem3,
+            this.layoutControlItem4});
             this.Root.Name = "Root";
             this.Root.Size = new System.Drawing.Size(800, 450);
             this.Root.TextVisible = false;
@@ -238,9 +247,51 @@
             this.layoutControlItem2.Control = this.gridTransactionLines;
             this.layoutControlItem2.Location = new System.Drawing.Point(0, 227);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(780, 203);
+            this.layoutControlItem2.Size = new System.Drawing.Size(780, 170);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnAdd.Appearance.Options.UseFont = true;
+            this.btnAdd.Location = new System.Drawing.Point(12, 409);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(386, 29);
+            this.btnAdd.StyleController = this.layoutControl1;
+            this.btnAdd.TabIndex = 6;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // layoutControlItem3
+            // 
+            this.layoutControlItem3.Control = this.btnAdd;
+            this.layoutControlItem3.Location = new System.Drawing.Point(0, 397);
+            this.layoutControlItem3.Name = "layoutControlItem3";
+            this.layoutControlItem3.Size = new System.Drawing.Size(390, 33);
+            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem3.TextVisible = false;
+            // 
+            // btnClose
+            // 
+            this.btnClose.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnClose.Appearance.Options.UseFont = true;
+            this.btnClose.Location = new System.Drawing.Point(402, 409);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(386, 29);
+            this.btnClose.StyleController = this.layoutControl1;
+            this.btnClose.TabIndex = 7;
+            this.btnClose.Text = "Close";
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // layoutControlItem4
+            // 
+            this.layoutControlItem4.Control = this.btnClose;
+            this.layoutControlItem4.Location = new System.Drawing.Point(390, 397);
+            this.layoutControlItem4.Name = "layoutControlItem4";
+            this.layoutControlItem4.Size = new System.Drawing.Size(390, 33);
+            this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem4.TextVisible = false;
             // 
             // TransactionForm
             // 
@@ -260,6 +311,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -284,5 +337,9 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnDiscountValue;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTotalValue;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
+        private DevExpress.XtraEditors.SimpleButton btnClose;
+        private DevExpress.XtraEditors.SimpleButton btnAdd;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem4;
     }
 }

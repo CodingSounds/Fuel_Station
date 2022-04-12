@@ -32,7 +32,7 @@ namespace Fuel_Station.WF
 
         private async Task LoadItems(Guid UserID)
         {
-            var employee = await handlers.LoadEmployeee(UserID, this);
+            var employee = await handlers.LoadEmployeeeTypeToInt(UserID, this);
 
             handlers.LoginConfirmationItems(employee.Value, this);//this will close the form if you are not the correct user
 

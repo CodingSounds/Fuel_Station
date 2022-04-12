@@ -25,7 +25,7 @@ namespace Fuel_Station.WF
         private async void MenuForm_Load(object sender, EventArgs e)
         {
             
-            var z = await handlers.GetEmployee(UserID);
+            var z = await handlers.GetEmployeeTypeToInt(UserID);
             employeeType = handlers.EmployeeTypeString(z);
         }
 

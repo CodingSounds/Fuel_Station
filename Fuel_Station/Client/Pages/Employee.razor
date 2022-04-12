@@ -44,8 +44,12 @@ else{
                     <td>@employee.Surname</td>
                     @*<td><input type="checkbox" value="@customer.Status" /></td>*@
                     <td>@employee.EmployeeType</td>
-                     <td>@employee.HireDateStart.ToFileTimeUtc() </td>
-                     <th>@employee.HireDateEnd</th>
+                     <td>@employee.HireDateStart.ToShortDateString() </td>
+                    @if (@employee.HireDateEnd != null)
+                    {
+                        <th>@employee.HireDateEnd.Value.ToShortDateString()</th>
+                    }
+                    
                       <td>@employee.SalaryPerMonth</td>
 
                      

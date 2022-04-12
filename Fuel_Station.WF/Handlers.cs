@@ -17,7 +17,7 @@ namespace Fuel_Station.WF
         {
 
         }
-        public async Task<int?> GetEmployee(Guid id)
+        public async Task<int?> GetEmployeeTypeToInt(Guid id)
         {
             using var client = new HttpClient();
             var content = await client.GetStringAsync($"https://localhost:7009/Employee/GetTypeOfEmpl{id}");
@@ -95,12 +95,27 @@ namespace Fuel_Station.WF
 
 
         }
-
-        public async Task<int? > LoadEmployeee(Guid UserID,Form f)
+        public async Task<EmployeeViewModel> GetEmployee(Guid id)
         {
-            int? employee = await GetEmployee(UserID);
 
-            if (employee > 100)
+            using var client = new HttpClient();
+            var content = await client.GetStringAsync($"https://localhost:7009/Employee/GetOneEmployee{id}/{id}");
+            
+
+            if (content != "")////fix
+            {
+
+                var employee = JsonConvert.DeserializeObject<EmployeeViewModel>(content);
+                return employee;
+            }
+            return null;
+        }
+
+        public async Task<int? > LoadEmployeeeTypeToInt(Guid UserID,Form f)
+        {
+            int? employee = await GetEmployeeTypeToInt(UserID);
+
+            if (employee > 100)//wtf???can have a lot of types
             {
                 
                 f.Close();
