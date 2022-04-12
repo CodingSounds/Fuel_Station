@@ -37,25 +37,20 @@ namespace Fuel_Station.WF
         private async void CustomersForm_Load(object sender, EventArgs e)
         {
 
-            await LoadCustomers();
+            await LoadCustomers(UserID);
             SetDataBindings();
             
-             gridView1.OptionsBehavior.Editable=false;//??
+             gridView1.OptionsBehavior.Editable=false;
 
 
 
         }
 
-        private async Task LoadCustomers()
+        private async Task LoadCustomers(Guid UserID)
         {
-            int? employee = await handlers.GetEmployee(UserID);
+            var employee= await handlers.LoadEmployeee(UserID, this);
 
-            if (employee == null)
-            {
-                Close();
-            };
-
-            handlers.LoginConfirmation(employee.Value, this);//this will close the form if you are not the correct user
+            handlers.LoginConfirmationForCustomers_Transactions(employee.Value, this);//this will close the form if you are not the correct user
 
             customerList = await handlers.LoadingCustomerList(UserID);
         }
@@ -93,6 +88,51 @@ namespace Fuel_Station.WF
 
 
 
+        }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+
+            var f = new NewCustomerForm();
+            f.formCustomer = this;
+            f.UserID = UserID;
+            f.ShowDialog();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (CheckIfNull())
+            {
+                var f = new NewCustomerForm();
+                f.UserID = UserID;
+                f.editCustomerID = GetCustomerFromGrid().ID;
+                f.formCustomer = this;
+
+                f.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Invalid operation. Can not edit customer that does not exist");
+            }
+        }
+
+        private CustomerViewModel GetCustomerFromGrid()//an exoume 0?
+        {
+            int index = gridView1.FocusedRowHandle;
+
+            var customerView = gridView1.GetRow(index) as CustomerViewModel;
+            return customerView;
+        }
+
+        private bool CheckIfNull()
+        {
+            var x = gridView1.RowCount;
+           return x > 0;
+        }
+
+        private void btnCLose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

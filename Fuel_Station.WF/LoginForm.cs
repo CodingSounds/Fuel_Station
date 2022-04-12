@@ -35,25 +35,54 @@ namespace Fuel_Station.WF
 
         private async void btnEnter_Click(object sender, EventArgs e)
         {
-            string username;
-            string password;
-            int? employee = 0;
+            var guidEMployee = await GetID(txtUsername.Text, txtPassword.Text);
 
-            username =txtUsername.Text;
-           password=txtPassword.Text;
+            var employee = await GetEmployee(guidEMployee);
 
-            var guidEMployee = await GetID(password, username);
+            Authentification( guidEMployee, employee);
 
-            if(guidEMployee != null)
+
+
+        }
+
+        private async Task<Guid?> GetID(string password, string username)
+        {
+            
+            using var client = new HttpClient();
+            var id= await client.GetStringAsync($"https://localhost:7009/Employee/GetUser{username}/{password}");
+            if (id != "" && id.Substring(0,9)!= "<!DOCTYPE")//fix it
             {
-                employee = await handler.GetEmployee(guidEMployee.Value);
-                
+                var t = id.Replace('"', ' ');
+                Guid idGuid = Guid.Parse(t);
+                return idGuid;
             }
+            return null;
            
-           
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+       private async Task<int?> GetEmployee(Guid? guidEMployee)
+        {
+            
 
            
-            if (handler.EmployeeTypeString(employee) != "None")
+
+            if (guidEMployee != null)
+            {
+                var employee = await handler.GetEmployee(guidEMployee.Value);
+
+                return employee.Value;
+            }
+            return null;
+        }
+
+        private void Authentification(Guid? guidEMployee, int? employee)
+        {
+            if (handler.EmployeeTypeString(employee) != "None"&& guidEMployee!=null)
             {
 
 
@@ -65,7 +94,7 @@ namespace Fuel_Station.WF
 
 
 
-                
+
 
             }
             else
@@ -75,42 +104,6 @@ namespace Fuel_Station.WF
             }
 
 
-
         }
-
-        private async Task<Guid?> GetID(string password, string username)
-        {
-            
-            using var client = new HttpClient();
-            var id= await client.GetStringAsync($"https://localhost:7009/Employee/GetUser{username}/{password}");
-            if (id != null)
-            {
-                var t = id.Replace('"', ' ');
-                Guid idGuid = Guid.Parse(t);
-                return idGuid;
-            }
-            return null;
-           
-        }
-
-       /* public async Task<int?>GetEmployee(Guid id)
-        {
-            using var client = new HttpClient();
-            var content = await client.GetStringAsync($"https://localhost:7009/Employee/GetTypeOfEmpl{id}");
-
-            if(content != null)
-            {
-
-                int employeeType = Convert.ToInt32(content);
-                return employeeType;
-            }
-            return null;
-
-
-        }
-        public string EmployeeTypeString(int? employeetype)
-        {
-            return ((EmployeeValueEnum)employeetype).ToString();
-        }*/
     }
 }

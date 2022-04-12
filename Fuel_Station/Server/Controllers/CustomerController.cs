@@ -100,21 +100,30 @@ namespace Fuel_Station.Server.Controllers
             return t;
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
 
-        public async Task Post(CustomerViewModel newcustomerview)
+        public async Task Post(Guid id,CustomerViewModel newcustomerview)
         {
-            Customer customer = new Customer
+            var type = await _employeeRepo.GetByIdAsync(id);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
             {
-                
-                ID = newcustomerview.ID,
-                Name = newcustomerview.Name,
-                Surname = newcustomerview.Surname,
-                CardNumber = newcustomerview.CardNumber,
-                Status = true
-            };
-            await _customerRepo.CreateAsync(customer);
 
+            }
+            else
+            {
+                Customer customer = new Customer
+                {
+
+                    ID = newcustomerview.ID,
+                    Name = newcustomerview.Name,
+                    Surname = newcustomerview.Surname,
+                    CardNumber = newcustomerview.CardNumber,
+                    Status = true
+                };
+                await _customerRepo.CreateAsync(customer);
+            }
+           
+           
         }
 
         [HttpDelete("{id}")]
@@ -144,20 +153,29 @@ namespace Fuel_Station.Server.Controllers
             await _customerRepo.CreateAsync(t);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Put(CustomerViewModel newcustomerview)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(Guid id,CustomerViewModel newcustomerview)
         {
             var customertoupdate = await _customerRepo.GetByIdAsync(newcustomerview.ID);
             if (customertoupdate == null) return NotFound();
 
+            var type = await _employeeRepo.GetByIdAsync(id);
+            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
+            {
+                return NotFound();
+            }
+            else
+            {
+                customertoupdate.ID = newcustomerview.ID;
+                customertoupdate.Name = newcustomerview.Name;
+                customertoupdate.Surname = newcustomerview.Surname;
+                customertoupdate.CardNumber = newcustomerview.CardNumber;
+                customertoupdate.Status = newcustomerview.Status;
 
-            customertoupdate.ID = newcustomerview.ID;
-            customertoupdate.Name = newcustomerview.Name;
-            customertoupdate.Surname = newcustomerview.Surname;
-            customertoupdate.CardNumber = newcustomerview.CardNumber;
-            customertoupdate.Status = newcustomerview.Status;
+                await _customerRepo.UpdateAsync(newcustomerview.ID, customertoupdate);
+            }
 
-            await _customerRepo.UpdateAsync(newcustomerview.ID, customertoupdate);
+          
 
 
 

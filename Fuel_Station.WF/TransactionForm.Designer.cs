@@ -29,6 +29,15 @@
         private void InitializeComponent()
         {
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            this.gridTransactionLines = new DevExpress.XtraGrid.GridControl();
+            this.gridViewTransactionLines = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridColumnItemCode = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnItemPrice = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridNetValue = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridDiscountPercent = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnDiscountValue = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTotalValue = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridTransaction = new DevExpress.XtraGrid.GridControl();
             this.gridViewTransaction = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumnDate = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -36,24 +45,15 @@
             this.gridColumnCustomer = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.gridTransactionLines = new DevExpress.XtraGrid.GridControl();
-            this.gridViewTransactionLines = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.gridColumnItem = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnItemPrice = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridNetValue = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridDiscountPercent = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnDiscountValue = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTotalValue = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewTransactionLines)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransaction)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTransaction)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridViewTransactionLines)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -69,6 +69,99 @@
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
+            // gridTransactionLines
+            // 
+            this.gridTransactionLines.Location = new System.Drawing.Point(12, 239);
+            this.gridTransactionLines.MainView = this.gridViewTransactionLines;
+            this.gridTransactionLines.Name = "gridTransactionLines";
+            this.gridTransactionLines.Size = new System.Drawing.Size(776, 199);
+            this.gridTransactionLines.TabIndex = 5;
+            this.gridTransactionLines.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridViewTransactionLines});
+            // 
+            // gridViewTransactionLines
+            // 
+            this.gridViewTransactionLines.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridColumnItemCode,
+            this.gridColumnQuantity,
+            this.gridColumnItemPrice,
+            this.gridNetValue,
+            this.gridDiscountPercent,
+            this.gridColumnDiscountValue,
+            this.gridColumnTotalValue});
+            this.gridViewTransactionLines.GridControl = this.gridTransactionLines;
+            this.gridViewTransactionLines.Name = "gridViewTransactionLines";
+            // 
+            // gridColumnItemCode
+            // 
+            this.gridColumnItemCode.Caption = "Item Code";
+            this.gridColumnItemCode.FieldName = "ItemCode";
+            this.gridColumnItemCode.MinWidth = 25;
+            this.gridColumnItemCode.Name = "gridColumnItemCode";
+            this.gridColumnItemCode.Visible = true;
+            this.gridColumnItemCode.VisibleIndex = 0;
+            this.gridColumnItemCode.Width = 94;
+            // 
+            // gridColumnQuantity
+            // 
+            this.gridColumnQuantity.Caption = "Quantity";
+            this.gridColumnQuantity.FieldName = "Quantity";
+            this.gridColumnQuantity.MinWidth = 25;
+            this.gridColumnQuantity.Name = "gridColumnQuantity";
+            this.gridColumnQuantity.Visible = true;
+            this.gridColumnQuantity.VisibleIndex = 1;
+            this.gridColumnQuantity.Width = 94;
+            // 
+            // gridColumnItemPrice
+            // 
+            this.gridColumnItemPrice.Caption = "Item Price";
+            this.gridColumnItemPrice.FieldName = "ItemPrice";
+            this.gridColumnItemPrice.MinWidth = 25;
+            this.gridColumnItemPrice.Name = "gridColumnItemPrice";
+            this.gridColumnItemPrice.Visible = true;
+            this.gridColumnItemPrice.VisibleIndex = 2;
+            this.gridColumnItemPrice.Width = 94;
+            // 
+            // gridNetValue
+            // 
+            this.gridNetValue.Caption = "Net Value";
+            this.gridNetValue.FieldName = "NetValue";
+            this.gridNetValue.MinWidth = 25;
+            this.gridNetValue.Name = "gridNetValue";
+            this.gridNetValue.Visible = true;
+            this.gridNetValue.VisibleIndex = 3;
+            this.gridNetValue.Width = 94;
+            // 
+            // gridDiscountPercent
+            // 
+            this.gridDiscountPercent.Caption = "Discount Percent";
+            this.gridDiscountPercent.FieldName = "DiscountPercent";
+            this.gridDiscountPercent.MinWidth = 25;
+            this.gridDiscountPercent.Name = "gridDiscountPercent";
+            this.gridDiscountPercent.Visible = true;
+            this.gridDiscountPercent.VisibleIndex = 4;
+            this.gridDiscountPercent.Width = 94;
+            // 
+            // gridColumnDiscountValue
+            // 
+            this.gridColumnDiscountValue.Caption = "Discount Value";
+            this.gridColumnDiscountValue.FieldName = "DiscountValue";
+            this.gridColumnDiscountValue.MinWidth = 25;
+            this.gridColumnDiscountValue.Name = "gridColumnDiscountValue";
+            this.gridColumnDiscountValue.Visible = true;
+            this.gridColumnDiscountValue.VisibleIndex = 5;
+            this.gridColumnDiscountValue.Width = 94;
+            // 
+            // gridColumnTotalValue
+            // 
+            this.gridColumnTotalValue.Caption = "Total Value";
+            this.gridColumnTotalValue.FieldName = "TotalValue";
+            this.gridColumnTotalValue.MinWidth = 25;
+            this.gridColumnTotalValue.Name = "gridColumnTotalValue";
+            this.gridColumnTotalValue.Visible = true;
+            this.gridColumnTotalValue.VisibleIndex = 6;
+            this.gridColumnTotalValue.Width = 94;
+            // 
             // gridTransaction
             // 
             this.gridTransaction.Location = new System.Drawing.Point(12, 12);
@@ -78,6 +171,7 @@
             this.gridTransaction.TabIndex = 4;
             this.gridTransaction.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewTransaction});
+            //this.gridTransaction.Click += new System.EventHandler(this.gridTransaction_Click);
             // 
             // gridViewTransaction
             // 
@@ -139,29 +233,6 @@
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
-            // gridTransactionLines
-            // 
-            this.gridTransactionLines.Location = new System.Drawing.Point(12, 239);
-            this.gridTransactionLines.MainView = this.gridViewTransactionLines;
-            this.gridTransactionLines.Name = "gridTransactionLines";
-            this.gridTransactionLines.Size = new System.Drawing.Size(776, 199);
-            this.gridTransactionLines.TabIndex = 5;
-            this.gridTransactionLines.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridViewTransactionLines});
-            // 
-            // gridViewTransactionLines
-            // 
-            this.gridViewTransactionLines.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.gridColumnItem,
-            this.gridColumnQuantity,
-            this.gridColumnItemPrice,
-            this.gridNetValue,
-            this.gridDiscountPercent,
-            this.gridColumnDiscountValue,
-            this.gridColumnTotalValue});
-            this.gridViewTransactionLines.GridControl = this.gridTransactionLines;
-            this.gridViewTransactionLines.Name = "gridViewTransactionLines";
-            // 
             // layoutControlItem2
             // 
             this.layoutControlItem2.Control = this.gridTransactionLines;
@@ -170,76 +241,6 @@
             this.layoutControlItem2.Size = new System.Drawing.Size(780, 203);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
-            // 
-            // gridColumnItem
-            // 
-            this.gridColumnItem.Caption = "Item";
-            this.gridColumnItem.FieldName = "Item";
-            this.gridColumnItem.MinWidth = 25;
-            this.gridColumnItem.Name = "gridColumnItem";
-            this.gridColumnItem.Visible = true;
-            this.gridColumnItem.VisibleIndex = 0;
-            this.gridColumnItem.Width = 94;
-            // 
-            // gridColumnQuantity
-            // 
-            this.gridColumnQuantity.Caption = "Quantity";
-            this.gridColumnQuantity.FieldName = "Quantity";
-            this.gridColumnQuantity.MinWidth = 25;
-            this.gridColumnQuantity.Name = "gridColumnQuantity";
-            this.gridColumnQuantity.Visible = true;
-            this.gridColumnQuantity.VisibleIndex = 1;
-            this.gridColumnQuantity.Width = 94;
-            // 
-            // gridColumnItemPrice
-            // 
-            this.gridColumnItemPrice.Caption = "ItemPrice";
-            this.gridColumnItemPrice.FieldName = "Item Price";
-            this.gridColumnItemPrice.MinWidth = 25;
-            this.gridColumnItemPrice.Name = "gridColumnItemPrice";
-            this.gridColumnItemPrice.Visible = true;
-            this.gridColumnItemPrice.VisibleIndex = 2;
-            this.gridColumnItemPrice.Width = 94;
-            // 
-            // gridNetValue
-            // 
-            this.gridNetValue.Caption = "Net Value";
-            this.gridNetValue.FieldName = "NetValue";
-            this.gridNetValue.MinWidth = 25;
-            this.gridNetValue.Name = "gridNetValue";
-            this.gridNetValue.Visible = true;
-            this.gridNetValue.VisibleIndex = 3;
-            this.gridNetValue.Width = 94;
-            // 
-            // gridDiscountPercent
-            // 
-            this.gridDiscountPercent.Caption = "Discount Percent";
-            this.gridDiscountPercent.FieldName = "DiscountPercent";
-            this.gridDiscountPercent.MinWidth = 25;
-            this.gridDiscountPercent.Name = "gridDiscountPercent";
-            this.gridDiscountPercent.Visible = true;
-            this.gridDiscountPercent.VisibleIndex = 4;
-            this.gridDiscountPercent.Width = 94;
-            // 
-            // gridColumnDiscountValue
-            // 
-            this.gridColumnDiscountValue.Caption = "Discount Value";
-            this.gridColumnDiscountValue.FieldName = "DiscountValue";
-            this.gridColumnDiscountValue.MinWidth = 25;
-            this.gridColumnDiscountValue.Name = "gridColumnDiscountValue";
-            this.gridColumnDiscountValue.Visible = true;
-            this.gridColumnDiscountValue.VisibleIndex = 5;
-            this.gridColumnDiscountValue.Width = 94;
-            // 
-            // gridColumnTotalValue
-            // 
-            this.gridColumnTotalValue.Caption = "Total Value";
-            this.gridColumnTotalValue.FieldName = "TotalValue";
-            this.gridColumnTotalValue.MinWidth = 25;
-            this.gridColumnTotalValue.Name = "gridColumnTotalValue";
-            this.gridColumnTotalValue.Visible = true;
-            this.gridColumnTotalValue.VisibleIndex = 6;
-            this.gridColumnTotalValue.Width = 94;
             // 
             // TransactionForm
             // 
@@ -252,12 +253,12 @@
             this.Load += new System.EventHandler(this.TransactionForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewTransactionLines)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransaction)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTransaction)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridViewTransactionLines)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             this.ResumeLayout(false);
 
@@ -275,7 +276,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnCustomer;
         private DevExpress.XtraGrid.GridControl gridTransactionLines;
         private DevExpress.XtraGrid.Views.Grid.GridView gridViewTransactionLines;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumnItem;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnItemCode;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnQuantity;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnItemPrice;
         private DevExpress.XtraGrid.Columns.GridColumn gridNetValue;

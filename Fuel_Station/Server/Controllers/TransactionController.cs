@@ -92,9 +92,10 @@ namespace Fuel_Station.Server.Controllers
                         ID = transline.ID,
                         TotalValue = transline.TotalValue,
                         NetValue = transline.NetValue,
-                        DiscountPercentage = transline.DiscountPercentage,
+                        DiscountPercent = transline.DiscountPercentage,
                         ItemCode = transline.Item.Code,
-                        DiscountValue = transline.DiscountValue
+                        DiscountValue = transline.DiscountValue,
+                        Quantity=transline.Quantity,
 
 
 
@@ -144,7 +145,7 @@ namespace Fuel_Station.Server.Controllers
                     ID = line.ID,
                     TotalValue = line.TotalValue,
                     NetValue = line.NetValue,
-                    DiscountPercentage = line.DiscountPercentage,
+                    DiscountPercentage = line.DiscountPercent,
                     ItemID=line.ItemID,
                    DiscountValue= line.DiscountValue
 

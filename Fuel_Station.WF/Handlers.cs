@@ -22,7 +22,7 @@ namespace Fuel_Station.WF
             using var client = new HttpClient();
             var content = await client.GetStringAsync($"https://localhost:7009/Employee/GetTypeOfEmpl{id}");
 
-            if (content != null)
+            if (content!= "" )////fix
             {
 
                 int employeeType = Convert.ToInt32(content);
@@ -33,7 +33,8 @@ namespace Fuel_Station.WF
 
         }
         public string EmployeeTypeString(int? employeetype)
-        {
+        {if(employeetype==null)
+                return null;
             return ((EmployeeValueEnum)employeetype).ToString();
         }
         public async Task<List<CustomerViewModel>> LoadingCustomerList(Guid id)
@@ -60,7 +61,19 @@ namespace Fuel_Station.WF
 
 
         }
-        public async void LoginConfirmation(int employee, Form f)//douleuei>????
+        public async Task<List<ItemViewModel>> LoadingItemList(Guid id)
+        {
+            using var client = new HttpClient();
+
+            var itemListString = await client.GetStringAsync($"https://localhost:7009/Item/GetAllItems{ id}");
+            var itemList = JsonConvert.DeserializeObject<List<ItemViewModel>>(itemListString);
+
+            return itemList;
+
+
+
+        }
+        public async void LoginConfirmationForCustomers_Transactions(int employee, Form f)//douleuei>????
         {
             string employeeType = EmployeeTypeString(employee);
             if (employeeType == "None" || employeeType == "Staff")
@@ -71,6 +84,59 @@ namespace Fuel_Station.WF
 
 
         }
+        public async void LoginConfirmationItems(int employee, Form f)//douleuei>????
+        {
+            string employeeType = EmployeeTypeString(employee);
+            if (employeeType == "None" || employeeType == "Cashier")
+            {
+                MessageBox.Show("You are not eligible to continue");
+                f.Close();
+            }
+
+
+        }
+
+        public async Task<int? > LoadEmployeee(Guid UserID,Form f)
+        {
+            int? employee = await GetEmployee(UserID);
+
+            if (employee > 100)
+            {
+                
+                f.Close();
+            };
+            return employee;
+        }
+
+        public async Task<CustomerViewModel> GetCustomer(Guid UserID,Guid customerID)
+        {
+            using var client = new HttpClient();
+            var content = await client.GetStringAsync($"https://localhost:7009/Customer/GetOneCustomer{UserID}/{customerID}");
+            var customer = JsonConvert.DeserializeObject<CustomerViewModel>(content);
+            if (!(content != "" && content.Substring(0, 9) != "<!DOCTYPE"))//fix it
+            {
+                MessageBox.Show("Invalid Customer ID");
+                
+                return null;
+            }
+            return customer;
+
+        }
+        public async Task<ItemViewModel> GetItem(Guid id)
+        {
+            using var client = new HttpClient();
+            var content = await client.GetStringAsync($"https://localhost:7009/Customer/{id}");
+            var item = JsonConvert.DeserializeObject<ItemViewModel>(content);
+            if (!(content != "" && content.Substring(0, 9) != "<!DOCTYPE"))//fixxxxxxxxxxxx it
+            {
+                MessageBox.Show("Invalid Item ID");
+
+                return null;
+            }
+            return item;
+
+        }
+
 
 
     }

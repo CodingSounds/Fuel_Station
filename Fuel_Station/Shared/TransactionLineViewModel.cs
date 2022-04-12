@@ -16,7 +16,7 @@ namespace Fuel_Station.Shared
         public decimal? Quantity { get; set; }//Sigoura to thelo decimal logo kausimon?
         public decimal ItemPrice { get; set; }
         public decimal NetValue { get; set; }
-        public decimal DiscountPercentage { get; set; }//thelei validetion mallon apo edo
+        public decimal DiscountPercent { get; set; }//thelei validetion mallon apo edo
         public decimal DiscountValue { get; set; }
         public decimal TotalValue { get; set; }
     }

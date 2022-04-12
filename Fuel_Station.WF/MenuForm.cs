@@ -64,5 +64,12 @@ namespace Fuel_Station.WF
 
 
         }
+
+        private void itemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ItemForm f = new();
+            f.UserID = UserID;
+            f.ShowDialog();
+        }
     }
 }

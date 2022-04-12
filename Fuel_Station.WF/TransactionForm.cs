@@ -57,6 +57,11 @@ namespace Fuel_Station.WF
         private void EditabilityOfGrids(bool i)
         {
             gridViewTransaction.OptionsBehavior.Editable = i;
+            
+
+            gridViewTransaction.OptionsView.ShowDetailButtons = false;
+          
+
             gridViewTransactionLines.OptionsBehavior.Editable = i;
         }
 
@@ -69,5 +74,10 @@ namespace Fuel_Station.WF
             gridTransactionLines.DataSource = bsLines;
 
         }
+
+      /* private void gridTransaction_Click(object sender, EventArgs e)
+        {
+ 
+        }*/
     }
 }
