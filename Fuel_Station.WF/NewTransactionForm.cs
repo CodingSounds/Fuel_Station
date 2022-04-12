@@ -108,7 +108,7 @@ namespace Fuel_Station.WF
             var existCard =  SearchCardNUmber_andFIllText();
             if (!existCard && CardValidation(txtCardNumber.Text))
             {
-                var msg = string.Format("  Do you want to create a new  Customer");
+                var msg = string.Format("Card number is not found.  Do you want to create a new  Customer with this Card number?");
                 MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                 DialogResult result = MessageBox.Show(msg, " Create Customer ", buttons);
                 if (result == DialogResult.Yes)

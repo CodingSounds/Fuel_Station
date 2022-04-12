@@ -20,8 +20,10 @@ namespace FuelStation.EF.Configurations
             builder.Property(customer => customer.Surname).HasMaxLength(50);
             builder.Property(customer => customer.CardNumber).HasMaxLength(15);
 
-            
-            
+            builder.HasIndex(customer => customer.CardNumber).IsUnique();
+
+   
+
 
         }
     }

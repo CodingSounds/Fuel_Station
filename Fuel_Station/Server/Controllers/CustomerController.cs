@@ -104,8 +104,12 @@ namespace Fuel_Station.Server.Controllers
 
         public async Task Post(Guid id,CustomerViewModel newcustomerview)
         {
-            var type = await _employeeRepo.GetByIdAsync(id);
-            if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
+            var customerList = await _customerRepo.GetAllAsync();
+            var customerCardNumberList = customerList.Select(x => x.CardNumber);
+            if (customerCardNumberList.Contains(newcustomerview.CardNumber))
+                return;
+            var userID = await _employeeRepo.GetByIdAsync(id);
+            if (!(userID.EmployeeType == EmployeeTypeEnum.Manager || userID.EmployeeType == EmployeeTypeEnum.Cashier))
             {
 
             }
@@ -166,9 +170,16 @@ namespace Fuel_Station.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(Guid id,CustomerViewModel newcustomerview)
         {
-
+           
             var customertoupdate = await _customerRepo.GetByIdAsync(newcustomerview.ID);
             if (customertoupdate == null) return NotFound();
+
+            var customerList = await _customerRepo.GetAllAsync();
+            var customerCardNumberList = customerList.Select(x => x.CardNumber);
+
+
+            if ((newcustomerview.CardNumber != customertoupdate.CardNumber)&& customerCardNumberList.Contains(newcustomerview.CardNumber))
+                return Problem();
 
             var type = await _employeeRepo.GetByIdAsync(id);
             if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))

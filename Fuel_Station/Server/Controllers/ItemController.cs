@@ -117,6 +117,10 @@ namespace Fuel_Station.Server.Controllers
 
         public async Task Post(Guid id,ItemViewModel itemViewModel)
         {
+            var itemList = await _ItemRepo.GetAllAsync();
+            var customerCardNumberList = itemList.Select(x => x.Code);
+            if (customerCardNumberList.Contains(itemViewModel.Code))
+                return;
 
 
             var type = await _employeeRepo.GetByIdAsync(id);
@@ -186,7 +190,10 @@ namespace Fuel_Station.Server.Controllers
         {
             var itemtupdate = await _ItemRepo.GetByIdAsync(itemViewModel.ID);
             if (itemtupdate == null) return NotFound();
-
+            var itemList = await _ItemRepo.GetAllAsync();
+            var customerCardNumberList = itemList.Select(x => x.Code);
+            if ((itemViewModel.Code != itemtupdate.Code)&& customerCardNumberList.Contains(itemViewModel.Code))
+                return NotFound();
 
             var type = await _employeeRepo.GetByIdAsync(id);
             if (!(type.EmployeeType == EmployeeTypeEnum.Manager || type.EmployeeType == EmployeeTypeEnum.Cashier))
