@@ -36,7 +36,7 @@ namespace Fuel_Station.Server.Controllers
             var activeTransList = tranList.FindAll(x => x.Date.Year == year&& x.Date.Month == month);
             var activeTransListID= activeTransList.Select(x=>x.ID).ToList();
             var activeTranslineList = tranLineList.FindAll(x => activeTransListID.Contains( x.ID));
-            var Income = activeTranslineList.Sum(x => x.TotalValue);
+            var Income = activeTranslineList.Sum(x => x.TotalValueOfLine);
             var Expenses = activeTranslineList.Sum(x => (1-x.DiscountPercentage)*x.Quantity*x.ItemPrice);
             Expenses += rentCost.Value + Expenses;
             var Total = Income - Expenses;

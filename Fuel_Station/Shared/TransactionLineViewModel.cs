@@ -18,6 +18,6 @@ namespace Fuel_Station.Shared
         public decimal NetValue { get; set; }
         public decimal DiscountPercent { get; set; }//thelei validetion mallon apo edo
         public decimal DiscountValue { get; set; }
-        public decimal TotalValue { get; set; }
+        public decimal TotalValueOfLine { get; set; }
     }
 }

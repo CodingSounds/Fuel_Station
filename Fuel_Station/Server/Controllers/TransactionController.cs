@@ -38,6 +38,7 @@ namespace Fuel_Station.Server.Controllers
                     CardNumber=x.Customer.CardNumber,
                     EmployeeType=x.Employee.EmployeeType.ToString(),
                     Date = x.Date,
+                    TotalValue=x.TotalValue
                     
 
 
@@ -73,8 +74,9 @@ namespace Fuel_Station.Server.Controllers
                 newtransview.ID = trans.ID;
                 newtransview.CustomerID = trans.CustomerID;
                 newtransview.PaymentMethod = trans.PaymentMethod;
-                
-                
+                newtransview.TotalValue = trans.TotalValue;
+
+
                 newtransview.Date = trans.Date;
                 newtransview.CardNumber = trans.Customer.CardNumber;
                 newtransview.EmployeeType = trans.Employee.EmployeeType.ToString();
@@ -90,7 +92,7 @@ namespace Fuel_Station.Server.Controllers
                     {
                         ItemPrice = transline.ItemPrice,
                         ID = transline.ID,
-                        TotalValue = transline.TotalValue,
+                        TotalValueOfLine = transline.TotalValueOfLine,
                         NetValue = transline.NetValue,
                         DiscountPercent = transline.DiscountPercentage,
                         ItemCode = transline.Item.Code,
@@ -139,8 +141,9 @@ namespace Fuel_Station.Server.Controllers
                     CustomerID = transactionViewModel.CustomerID,
                     EmployeeID = transactionViewModel.EmployeeID,
                     PaymentMethod = transactionViewModel.PaymentMethod,
+                    TotalValue = transactionViewModel.TotalValue,
 
-                    Status = true,
+                     Status = true,
                     TransactionLinesList = new()
                 };
                 foreach (var line in transactionViewModel.TransactionLinesList)
@@ -150,7 +153,7 @@ namespace Fuel_Station.Server.Controllers
                         ID = Guid.NewGuid(),
                         ItemPrice = line.ItemPrice,
                        
-                        TotalValue = line.TotalValue,
+                        TotalValueOfLine = line.TotalValueOfLine,
                         NetValue = line.NetValue,
                         DiscountPercentage = line.DiscountPercent,
                         ItemID = line.ItemID,

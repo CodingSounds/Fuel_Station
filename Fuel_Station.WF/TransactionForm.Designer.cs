@@ -39,7 +39,7 @@
             this.gridNetValue = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridDiscountPercent = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnDiscountValue = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTotalValue = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTotalValueOfLine = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridTransaction = new DevExpress.XtraGrid.GridControl();
             this.gridViewTransaction = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumnDate = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -50,6 +50,7 @@
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).BeginInit();
@@ -120,7 +121,7 @@
             this.gridNetValue,
             this.gridDiscountPercent,
             this.gridColumnDiscountValue,
-            this.gridColumnTotalValue});
+            this.gridColumnTotalValueOfLine});
             this.gridViewTransactionLines.GridControl = this.gridTransactionLines;
             this.gridViewTransactionLines.Name = "gridViewTransactionLines";
             // 
@@ -184,15 +185,15 @@
             this.gridColumnDiscountValue.VisibleIndex = 5;
             this.gridColumnDiscountValue.Width = 94;
             // 
-            // gridColumnTotalValue
+            // gridColumnTotalValueOfLine
             // 
-            this.gridColumnTotalValue.Caption = "Total Value";
-            this.gridColumnTotalValue.FieldName = "TotalValue";
-            this.gridColumnTotalValue.MinWidth = 25;
-            this.gridColumnTotalValue.Name = "gridColumnTotalValue";
-            this.gridColumnTotalValue.Visible = true;
-            this.gridColumnTotalValue.VisibleIndex = 6;
-            this.gridColumnTotalValue.Width = 94;
+            this.gridColumnTotalValueOfLine.Caption = "Total Value";
+            this.gridColumnTotalValueOfLine.FieldName = "TotalValueOfLine";
+            this.gridColumnTotalValueOfLine.MinWidth = 25;
+            this.gridColumnTotalValueOfLine.Name = "gridColumnTotalValueOfLine";
+            this.gridColumnTotalValueOfLine.Visible = true;
+            this.gridColumnTotalValueOfLine.VisibleIndex = 6;
+            this.gridColumnTotalValueOfLine.Width = 94;
             // 
             // gridTransaction
             // 
@@ -209,7 +210,8 @@
             this.gridViewTransaction.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.gridColumnDate,
             this.gridColumnEmployeeType,
-            this.gridColumnCustomer});
+            this.gridColumnCustomer,
+            this.gridColumn1});
             this.gridViewTransaction.GridControl = this.gridTransaction;
             this.gridViewTransaction.Name = "gridViewTransaction";
             this.gridViewTransaction.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewTransaction_FocusedRowChanged);
@@ -293,6 +295,16 @@
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
             // 
+            // gridColumn1
+            // 
+            this.gridColumn1.Caption = "Total Value";
+            this.gridColumn1.FieldName = "TotalValue";
+            this.gridColumn1.MinWidth = 25;
+            this.gridColumn1.Name = "gridColumn1";
+            this.gridColumn1.Visible = true;
+            this.gridColumn1.VisibleIndex = 3;
+            this.gridColumn1.Width = 94;
+            // 
             // TransactionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -335,11 +347,12 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridNetValue;
         private DevExpress.XtraGrid.Columns.GridColumn gridDiscountPercent;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnDiscountValue;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTotalValue;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTotalValueOfLine;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private DevExpress.XtraEditors.SimpleButton btnClose;
         private DevExpress.XtraEditors.SimpleButton btnAdd;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem4;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn1;
     }
 }

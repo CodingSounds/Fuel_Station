@@ -1,5 +1,7 @@
-﻿@page "/MonthlyLedger"
+﻿@page "/MonthlyLedger/{User:guid?}"
+@using FuelStation.Models
 @using FuelStation.Models.Enums
+@using Fuel_Station.Shared
 @inject IJSRuntime jsRuntime
 @inject HttpClient httpClient
 @inject IJSRuntime jsRuntime
@@ -17,6 +19,8 @@ else{
         <tr>
             <th>Month</th>
             <th>Year</th>
+            <th>  </th>
+            <th>Rent</th>
         </tr>
     </thead>
     <tbody>
@@ -52,6 +56,24 @@ else{
                 
                 <button class="btn btn-success btn-sm" @onclick=DOD >Calculate</button>
             </td>
+            @if (false)
+                {<h4> @rent € </h4>
+
+                }
+                else
+                {
+                    <td> <input @bind=rentShow placeholder="Rent"/></td>
+                     <td>
+                
+                        <button class="btn btn-primary btn-sm" @onclick=SetRent >Set</button>
+                    </td>
+                }
+                
+              
+                       
+               
+                
+            
                 
 
     
@@ -113,16 +135,20 @@ else{
 
 
 @code{
-
+    [Parameter] public Guid? User { get; set; }
 
     private bool isLoading = true;
     private decimal? IncomeList=null;
     private decimal? ExpensesList = null;
     private decimal? total = null;
 
+    private decimal rentShow=4000;
+    private decimal rent;
 
     private int? year=null;
     private int? yearShow = null;
+
+    private List<TransactionViewModel> _transactionList;
 
     public MonthEnum monthEnum=new();
 
@@ -137,12 +163,16 @@ else{
     public void DOD(){
 
     }
+    private void SetRent()
+    {
+        rent = rentShow;
+    }
 
-    ////////////////async Task()
-    ////////////////{
+    //////////////async Task()
+    //////////////{
         
 
-    ////////////////}
+    //////////////}
 
    
    
@@ -150,7 +180,7 @@ else{
     //{
     //    var month=(int)monthEnum;
     //    var yearNumber = (int)year;
-    //    var x=_transaction?.Find(x=>x.Date.Month==month && x.Date.Year==yearNumber);
+    //    var x=_transactionList?.Find(x=>x.Date.Month==month && x.Date.Year==yearNumber);
     //    if (x == null)
     //    {
     //        return false;
@@ -162,7 +192,7 @@ else{
     //    var month=(int)monthEnum;
     //    var yearNumber = (int)year;
     //    IncomeList = 0;
-    //    IncomeList = _transaction?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber)?.Sum(x => x.TotalPrice);
+    //    IncomeList = _transactionList?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber)?.Sum(x => x.TotalPrice);
 
     //}
     //private void ExpensesCalculation()
@@ -174,13 +204,13 @@ else{
     //    var yearNumber = (int)year;
 
 
-    //    var transactionforExpenses=_transaction?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber);
+    //    var transactionforExpenses=_transactionList?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber);
     //    //var distGuidOfManagers = transactionforExpenses.Select(x => x.ManagerID).ToList<Guid>().Distinct();
     //    List<Guid> managersID = new();
     //    List<Guid> managersIDx = new();
     //    foreach (var trans in transactionforExpenses)
     //    {
-    //        managersID.Add(trans.ManagerID);
+    //        managersID.Add(trans.EmployeeID);
     //    }
 
     //    foreach (var id in managersID)

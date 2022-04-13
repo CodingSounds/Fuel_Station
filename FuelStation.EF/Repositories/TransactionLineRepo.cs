@@ -50,7 +50,7 @@ namespace FuelStation.EF.Repositories
             foundtransLIne.DiscountPercentage = entity.DiscountPercentage;
             foundtransLIne.DiscountValue = entity.DiscountValue;
             foundtransLIne.TransactionID=entity.TransactionID;
-            foundtransLIne.TotalValue=entity.TotalValue;
+            foundtransLIne.TotalValueOfLine=entity.TotalValueOfLine;
             foundtransLIne.Quantity=entity.Quantity;//nul>??
             
 

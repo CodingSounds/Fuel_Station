@@ -74,6 +74,13 @@
             this.layoutControlItem15 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem16 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.gridColumnItemCode = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridItemPrice = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnNetValue = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnDiscountPercent = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnDiscountValue = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTotalValueOfLine = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).BeginInit();
@@ -223,6 +230,14 @@
             // 
             // gridViewTransactionLines
             // 
+            this.gridViewTransactionLines.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridColumnItemCode,
+            this.gridColumnQuantity,
+            this.gridItemPrice,
+            this.gridColumnNetValue,
+            this.gridColumnDiscountPercent,
+            this.gridColumnDiscountValue,
+            this.gridColumnTotalValueOfLine});
             this.gridViewTransactionLines.GridControl = this.gridTransactionLines;
             this.gridViewTransactionLines.Name = "gridViewTransactionLines";
             // 
@@ -544,6 +559,76 @@
             this.layoutControlItem16.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem16.TextVisible = false;
             // 
+            // gridColumnItemCode
+            // 
+            this.gridColumnItemCode.Caption = "Item Code";
+            this.gridColumnItemCode.FieldName = "ItemCode";
+            this.gridColumnItemCode.MinWidth = 25;
+            this.gridColumnItemCode.Name = "gridColumnItemCode";
+            this.gridColumnItemCode.Visible = true;
+            this.gridColumnItemCode.VisibleIndex = 0;
+            this.gridColumnItemCode.Width = 94;
+            // 
+            // gridColumnQuantity
+            // 
+            this.gridColumnQuantity.Caption = "Quantity";
+            this.gridColumnQuantity.FieldName = "Quantity";
+            this.gridColumnQuantity.MinWidth = 25;
+            this.gridColumnQuantity.Name = "gridColumnQuantity";
+            this.gridColumnQuantity.Visible = true;
+            this.gridColumnQuantity.VisibleIndex = 1;
+            this.gridColumnQuantity.Width = 94;
+            // 
+            // gridItemPrice
+            // 
+            this.gridItemPrice.Caption = "Item Price";
+            this.gridItemPrice.FieldName = "ItemPrice";
+            this.gridItemPrice.MinWidth = 25;
+            this.gridItemPrice.Name = "gridItemPrice";
+            this.gridItemPrice.Visible = true;
+            this.gridItemPrice.VisibleIndex = 2;
+            this.gridItemPrice.Width = 94;
+            // 
+            // gridColumnNetValue
+            // 
+            this.gridColumnNetValue.Caption = "Net Value";
+            this.gridColumnNetValue.FieldName = "NetValue";
+            this.gridColumnNetValue.MinWidth = 25;
+            this.gridColumnNetValue.Name = "gridColumnNetValue";
+            this.gridColumnNetValue.Visible = true;
+            this.gridColumnNetValue.VisibleIndex = 3;
+            this.gridColumnNetValue.Width = 94;
+            // 
+            // gridColumnDiscountPercent
+            // 
+            this.gridColumnDiscountPercent.Caption = "Discount Percent";
+            this.gridColumnDiscountPercent.FieldName = "DiscountPercent";
+            this.gridColumnDiscountPercent.MinWidth = 25;
+            this.gridColumnDiscountPercent.Name = "gridColumnDiscountPercent";
+            this.gridColumnDiscountPercent.Visible = true;
+            this.gridColumnDiscountPercent.VisibleIndex = 4;
+            this.gridColumnDiscountPercent.Width = 94;
+            // 
+            // gridColumnDiscountValue
+            // 
+            this.gridColumnDiscountValue.Caption = "Discount Value";
+            this.gridColumnDiscountValue.FieldName = "DiscountValue";
+            this.gridColumnDiscountValue.MinWidth = 25;
+            this.gridColumnDiscountValue.Name = "gridColumnDiscountValue";
+            this.gridColumnDiscountValue.Visible = true;
+            this.gridColumnDiscountValue.VisibleIndex = 5;
+            this.gridColumnDiscountValue.Width = 94;
+            // 
+            // gridColumnTotalValueOfLine
+            // 
+            this.gridColumnTotalValueOfLine.Caption = "Total Value";
+            this.gridColumnTotalValueOfLine.FieldName = "TotalValueOfLine";
+            this.gridColumnTotalValueOfLine.MinWidth = 25;
+            this.gridColumnTotalValueOfLine.Name = "gridColumnTotalValueOfLine";
+            this.gridColumnTotalValueOfLine.Visible = true;
+            this.gridColumnTotalValueOfLine.VisibleIndex = 6;
+            this.gridColumnTotalValueOfLine.Width = 94;
+            // 
             // NewTransactionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -637,5 +722,12 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem9;
         private DevExpress.XtraEditors.SimpleButton btnCancel;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem16;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnItemCode;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnQuantity;
+        private DevExpress.XtraGrid.Columns.GridColumn gridItemPrice;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnNetValue;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnDiscountPercent;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnDiscountValue;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTotalValueOfLine;
     }
 }

@@ -19,7 +19,7 @@ namespace FuelStation.Models
         public decimal NetValue { get; set; }
         public decimal DiscountPercentage { get; set; }//thelei validetion mallon apo edo
         public decimal DiscountValue { get; set; }
-        public decimal TotalValue { get; set; }//prepei na upologizetai sto contractor????
+        public decimal TotalValueOfLine { get; set; }//prepei na upologizetai sto contractor????
 
         //EntityFramework properties
         public Transaction Transaction { get; set; }

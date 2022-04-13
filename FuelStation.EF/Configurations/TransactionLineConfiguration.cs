@@ -20,7 +20,7 @@ namespace FuelStation.EF.Configurations
             builder.Property(transLine => transLine.NetValue).HasColumnType("decimal(10,2)");
             builder.Property(transLine => transLine.DiscountPercentage).HasColumnType("decimal(10,2)");
             builder.Property(transLine => transLine.DiscountValue).HasColumnType("decimal(10,2)");
-            builder.Property(transLine => transLine.TotalValue).HasColumnType("decimal(10,2)");
+            builder.Property(transLine => transLine.TotalValueOfLine).HasColumnType("decimal(10,2)");
 
             //TODO:ondelete cascade ?!??
             builder.HasOne(transLine => transLine.Transaction).WithMany(transaction => transaction.TransactionLinesList).HasForeignKey(transline => transline.TransactionID);

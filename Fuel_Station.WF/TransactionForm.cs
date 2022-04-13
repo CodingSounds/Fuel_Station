@@ -34,6 +34,7 @@ namespace Fuel_Station.WF
         private async Task LoadTransactions()
         {
             transactionList= await handlers.LoadingTransactionList(UserID);
+            gridViewTransaction.RefreshData();
 
         }
 
@@ -86,6 +87,7 @@ namespace Fuel_Station.WF
             f.UserID = UserID;
             f.ShowDialog();
             await LoadTransactions();
+            
 
         }
 

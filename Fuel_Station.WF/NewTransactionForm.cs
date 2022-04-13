@@ -294,7 +294,7 @@ namespace Fuel_Station.WF
         }
         private decimal TotalPrice()
         {
-            return _transactionLines.Sum(x => x.TotalValue);
+            return _transactionLines.Sum(x => x.TotalValueOfLine);
         }
         private void CreateTransactionLine()
         {
@@ -308,7 +308,8 @@ namespace Fuel_Station.WF
             newTransactionLine.Quantity = _quantity;
             newTransactionLine.ItemID = _selectedItem.ID;
             newTransactionLine.NetValue = _NetValue;
-            newTransactionLine.TotalValue = _TotalValue;
+            newTransactionLine.TotalValueOfLine = _TotalValue;
+            
             if (OnlyOneFuel(newTransactionLine))
             {
                 _transactionLines.Add(newTransactionLine);
@@ -319,7 +320,7 @@ namespace Fuel_Station.WF
         }
         private bool CheckPaymentMethod()
         {
-            if (_TotalPrice > 50 && cmbItemCode.SelectedIndex==0)
+            if (_TotalPrice > 50 && cmbItemCode.SelectedIndex==2)
             {
                 var msg = string.Format("The transaction needs to be with cash. Do you want to proceed?");
                 MessageBoxButtons buttons = MessageBoxButtons.YesNo;
@@ -366,6 +367,8 @@ namespace Fuel_Station.WF
                 _transaction.PaymentMethod = _PaymentMethod;
                 _transaction.EmployeeID = UserID;
                 _transaction.CustomerID = _customer.ID;
+                _transaction.TotalValue = _TotalPrice;
+                _transaction.ID=Guid.NewGuid();
                 using var client = new HttpClient();
                 await client.PostAsJsonAsync($"https://localhost:7009/Transaction/{UserID}", _transaction);
 

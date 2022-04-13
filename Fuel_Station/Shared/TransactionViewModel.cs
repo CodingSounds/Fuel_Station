@@ -19,6 +19,7 @@ namespace Fuel_Station.Shared
 
         public string CardNumber { get; set; }
         public string EmployeeType { get; set; }
+        public decimal TotalValue { get; set; }
 
 
         public List<TransactionLineViewModel> TransactionLinesList { get; set; }
@@ -32,8 +33,9 @@ namespace Fuel_Station.Shared
         public Guid EmployeeID { get; set; }
         public Guid CustomerID { get; set; }
         public PaymentMethodEnum PaymentMethod { get; set; }
+        public decimal TotalValue { get; set; }
 
-        
+
 
 
         public List<TransactionLineViewModel> TransactionLinesList { get; set; }
