@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textQuantity = new System.Windows.Forms.TextBox();
             this.btnSearch = new DevExpress.XtraEditors.SimpleButton();
             this.btnSave = new DevExpress.XtraEditors.SimpleButton();
             this.cmbItemCode = new System.Windows.Forms.ComboBox();
             this.txtTotalPrice = new System.Windows.Forms.TextBox();
-            this.btn = new DevExpress.XtraEditors.SimpleButton();
+            this.btnAdd = new DevExpress.XtraEditors.SimpleButton();
             this.gridTransactionLines = new DevExpress.XtraGrid.GridControl();
             this.gridViewTransactionLines = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.cmbPaymentMethod = new System.Windows.Forms.ComboBox();
@@ -70,6 +70,8 @@
             this.emptySpaceItem11 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItem14 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem15 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.txtDiscountPercent = new System.Windows.Forms.TextBox();
+            this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransactionLines)).BeginInit();
@@ -100,16 +102,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
             // 
-            this.layoutControl1.Controls.Add(this.textBox1);
+            this.layoutControl1.Controls.Add(this.txtDiscountPercent);
+            this.layoutControl1.Controls.Add(this.textQuantity);
             this.layoutControl1.Controls.Add(this.btnSearch);
             this.layoutControl1.Controls.Add(this.btnSave);
             this.layoutControl1.Controls.Add(this.cmbItemCode);
             this.layoutControl1.Controls.Add(this.txtTotalPrice);
-            this.layoutControl1.Controls.Add(this.btn);
+            this.layoutControl1.Controls.Add(this.btnAdd);
             this.layoutControl1.Controls.Add(this.gridTransactionLines);
             this.layoutControl1.Controls.Add(this.cmbPaymentMethod);
             this.layoutControl1.Controls.Add(this.txtEmployeeSurname);
@@ -126,12 +130,12 @@
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
-            // textBox1
+            // textQuantity
             // 
-            this.textBox1.Location = new System.Drawing.Point(135, 380);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(58, 25);
-            this.textBox1.TabIndex = 11;
+            this.textQuantity.Location = new System.Drawing.Point(135, 380);
+            this.textQuantity.Name = "textQuantity";
+            this.textQuantity.Size = new System.Drawing.Size(58, 25);
+            this.textQuantity.TabIndex = 11;
             // 
             // btnSearch
             // 
@@ -171,16 +175,17 @@
             this.txtTotalPrice.Size = new System.Drawing.Size(103, 25);
             this.txtTotalPrice.TabIndex = 12;
             // 
-            // btn
+            // btnAdd
             // 
-            this.btn.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btn.Appearance.Options.UseFont = true;
-            this.btn.Location = new System.Drawing.Point(12, 409);
-            this.btn.Name = "btn";
-            this.btn.Size = new System.Drawing.Size(388, 29);
-            this.btn.StyleController = this.layoutControl1;
-            this.btn.TabIndex = 12;
-            this.btn.Text = "Add";
+            this.btnAdd.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnAdd.Appearance.Options.UseFont = true;
+            this.btnAdd.Location = new System.Drawing.Point(12, 409);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(388, 29);
+            this.btnAdd.StyleController = this.layoutControl1;
+            this.btnAdd.TabIndex = 12;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.Click += new System.EventHandler(this.btn_Add);
             // 
             // gridTransactionLines
             // 
@@ -276,7 +281,8 @@
             this.layoutControlItem10,
             this.emptySpaceItem11,
             this.layoutControlItem14,
-            this.layoutControlItem15});
+            this.layoutControlItem15,
+            this.layoutControlItem9});
             this.Root.Name = "Root";
             this.Root.Size = new System.Drawing.Size(800, 450);
             this.Root.TextVisible = false;
@@ -411,7 +417,7 @@
             // 
             // layoutControlItem11
             // 
-            this.layoutControlItem11.Control = this.btn;
+            this.layoutControlItem11.Control = this.btnAdd;
             this.layoutControlItem11.Location = new System.Drawing.Point(0, 397);
             this.layoutControlItem11.Name = "layoutControlItem11";
             this.layoutControlItem11.Size = new System.Drawing.Size(392, 33);
@@ -455,9 +461,9 @@
             // emptySpaceItem10
             // 
             this.emptySpaceItem10.AllowHotTrack = false;
-            this.emptySpaceItem10.Location = new System.Drawing.Point(392, 338);
+            this.emptySpaceItem10.Location = new System.Drawing.Point(567, 338);
             this.emptySpaceItem10.Name = "emptySpaceItem10";
-            this.emptySpaceItem10.Size = new System.Drawing.Size(388, 30);
+            this.emptySpaceItem10.Size = new System.Drawing.Size(213, 30);
             this.emptySpaceItem10.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem10
@@ -488,12 +494,28 @@
             // 
             // layoutControlItem15
             // 
-            this.layoutControlItem15.Control = this.textBox1;
+            this.layoutControlItem15.Control = this.textQuantity;
             this.layoutControlItem15.Location = new System.Drawing.Point(0, 368);
             this.layoutControlItem15.Name = "layoutControlItem15";
             this.layoutControlItem15.Size = new System.Drawing.Size(185, 29);
             this.layoutControlItem15.Text = "Quantity";
             this.layoutControlItem15.TextSize = new System.Drawing.Size(111, 16);
+            // 
+            // txtDiscountPercent
+            // 
+            this.txtDiscountPercent.Location = new System.Drawing.Point(527, 350);
+            this.txtDiscountPercent.Name = "txtDiscountPercent";
+            this.txtDiscountPercent.Size = new System.Drawing.Size(48, 25);
+            this.txtDiscountPercent.TabIndex = 15;
+            // 
+            // layoutControlItem9
+            // 
+            this.layoutControlItem9.Control = this.txtDiscountPercent;
+            this.layoutControlItem9.Location = new System.Drawing.Point(392, 338);
+            this.layoutControlItem9.Name = "layoutControlItem9";
+            this.layoutControlItem9.Size = new System.Drawing.Size(175, 30);
+            this.layoutControlItem9.Text = "Discount Percent";
+            this.layoutControlItem9.TextSize = new System.Drawing.Size(111, 16);
             // 
             // NewTransactionForm
             // 
@@ -534,6 +556,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -564,7 +587,7 @@
         private DevExpress.XtraEditors.SimpleButton btnSave;
         private ComboBox cmbItemCode;
         private TextBox txtTotalPrice;
-        private DevExpress.XtraEditors.SimpleButton btn;
+        private DevExpress.XtraEditors.SimpleButton btnAdd;
         private DevExpress.XtraGrid.GridControl gridTransactionLines;
         private DevExpress.XtraGrid.Views.Grid.GridView gridViewTransactionLines;
         private ComboBox cmbPaymentMethod;
@@ -580,7 +603,9 @@
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem11;
         private DevExpress.XtraEditors.SimpleButton btnSearch;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem14;
-        private TextBox textBox1;
+        private TextBox textQuantity;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem15;
+        private TextBox txtDiscountPercent;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem9;
     }
 }

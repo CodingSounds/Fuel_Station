@@ -20,8 +20,18 @@ namespace Fuel_Station.WF
 
         Handlers handlers = new();
 
+        List<ItemViewModel> itemList = new List<ItemViewModel>();
+
+        List<TransactionLineViewModel> _transactionLines = new();
+
         EmployeeViewModel _employee = new();
         CustomerViewModel _customer = new();
+        ItemViewModel _selectedItem = new();
+
+        string quantityString;
+        decimal quantity;
+        string discountPercentString;
+        decimal discountPercent;
 
 
 
@@ -62,7 +72,8 @@ namespace Fuel_Station.WF
             cmbPaymentMethod.SelectedIndex = -1;
             cmbPaymentMethod.Text = "Choose";
 
-            var itemList= await handlers.LoadingItemList(UserID);
+            itemList= await handlers.LoadingItemList(UserID);
+
             var itemListCode = itemList.Select(x => x.Code).ToList();
             cmbItemCode.DataSource = itemListCode;
             cmbItemCode.SelectedIndex = -1;
@@ -146,9 +157,69 @@ namespace Fuel_Station.WF
             return true;
         }
 
+        private void btn_Add(object sender, EventArgs e)
+        {
+            //Check quantity with itemCode
+            //
+            //decimal quantity=3;
 
+            //discountPercent = 3; //= txtDiscountPercent.Text;
+            int cmbIndex = cmbItemCode.SelectedIndex;
 
+            var _selectedItem = itemList[cmbIndex];
 
+            decimal NetValue = _selectedItem.Price * quantity;
 
+            decimal DiscountValue = NetValue * discountPercent;
+
+            decimal TotalValue = NetValue - DiscountValue;
+
+        }
+
+        private void checkIfNumbers()
+        {
+             var x = Decimal.TryParse(quantityString,out quantity);
+            var y = Decimal.TryParse(discountPercentString, out discountPercent);
+
+            if (!(x && y))
+            {
+                MessageBox.Show("Quantity and Discount Percent must be numbers");
+            }
+
+        }
+        private bool checkQuantityFuel()
+        {
+            int nothing;
+            var x=int.TryParse(quantityString, out nothing);
+            if (!x &&!(_selectedItem.ItemType==ItemTypeEnum.Fuel))
+            {
+                MessageBox.Show("Quantity must be an integer for this product.");
+                return false;
+            }
+            return true;
+        }
+
+        private void Binding()
+        {
+            BindingSource bsTransactionLines = new BindingSource();
+            bsTransactionLines.DataSource = _transactionLines;
+            gridTransactionLines.DataSource = bsTransactionLines;
+        }
+        private void MoreDiscount()
+        {
+            
+        }
+        private void OnlyOneFuel()
+        {
+
+        }
+        private void TotalPrice()
+        {
+
+        }
+        private void CreateTransactionLine()
+        {
+
+        }
     }
 }
