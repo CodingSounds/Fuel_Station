@@ -80,11 +80,13 @@ namespace Fuel_Station.WF
             Close();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {
             NewTransactionForm f = new();
             f.UserID = UserID;
             f.ShowDialog();
+            await LoadTransactions();
+
         }
 
         /* private void gridTransaction_Click(object sender, EventArgs e)

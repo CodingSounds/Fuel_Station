@@ -164,7 +164,16 @@ namespace Fuel_Station.Server.Controllers
             }
             else
             {
+               
                 var x = await _employeeRepo.GetByIdAsync(id);
+                if (x.Status == true)
+                {
+                    x.HireDateEnd = DateTime.Now;
+                }
+                else
+                {
+                    x.HireDateEnd = null;
+                }
                 x.Status = !x.Status;
                 await _employeeRepo.UpdateAsync(id, x);
             }

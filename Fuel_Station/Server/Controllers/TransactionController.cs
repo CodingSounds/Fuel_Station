@@ -126,35 +126,46 @@ namespace Fuel_Station.Server.Controllers
 
 
 
-        [HttpPost]
-        public async Task Post(TransactionCreateViewModel transactionViewModel) {
-            var dbTrans = new Transaction()
+        [HttpPost("{userID}")]
+        public async Task Post(Guid userID,TransactionCreateViewModel transactionViewModel) {
+
+
+            var userEmploy = await _employeeRepo.GetByIdAsync(userID);
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager || userEmploy.EmployeeType == EmployeeTypeEnum.Cashier)
             {
-                ID = transactionViewModel.ID,
-                CustomerID = transactionViewModel.CustomerID,
-                EmployeeID = transactionViewModel.EmployeeID,
-                PaymentMethod = transactionViewModel.PaymentMethod,
-                
-                Status = true,
-                TransactionLinesList = new()               
-            };
-            foreach (var line in transactionViewModel.TransactionLinesList) {
-                var dbLine = new TransactionLine()
+                var dbTrans = new Transaction()
                 {
-                    ItemPrice = line.ItemPrice,
-                    ID = line.ID,
-                    TotalValue = line.TotalValue,
-                    NetValue = line.NetValue,
-                    DiscountPercentage = line.DiscountPercent,
-                    ItemID=line.ItemID,
-                   DiscountValue= line.DiscountValue
+                    ID = Guid.NewGuid(),
+                    CustomerID = transactionViewModel.CustomerID,
+                    EmployeeID = transactionViewModel.EmployeeID,
+                    PaymentMethod = transactionViewModel.PaymentMethod,
 
+                    Status = true,
+                    TransactionLinesList = new()
                 };
+                foreach (var line in transactionViewModel.TransactionLinesList)
+                {
+                    var dbLine = new TransactionLine()
+                    {
+                        ID = Guid.NewGuid(),
+                        ItemPrice = line.ItemPrice,
+                       
+                        TotalValue = line.TotalValue,
+                        NetValue = line.NetValue,
+                        DiscountPercentage = line.DiscountPercent,
+                        ItemID = line.ItemID,
+                        DiscountValue = line.DiscountValue,
+                        Quantity=line.Quantity
+                        
 
-                dbTrans.TransactionLinesList.Add(dbLine);
+                    };
 
+                    dbTrans.TransactionLinesList.Add(dbLine);
+
+                }
+                await _transactionRepo.CreateAsync(dbTrans);
             }
-            await _transactionRepo.CreateAsync(dbTrans);
+           
         }
 
         [HttpDelete("{id}")]

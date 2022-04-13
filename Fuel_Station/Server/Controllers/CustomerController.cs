@@ -123,7 +123,9 @@ namespace Fuel_Station.Server.Controllers
                     Surname = newcustomerview.Surname,
                     CardNumber = newcustomerview.CardNumber,
                     Status = true
+                    
                 };
+                
                 await _customerRepo.CreateAsync(customer);
             }
            
