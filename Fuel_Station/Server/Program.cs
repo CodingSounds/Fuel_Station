@@ -20,7 +20,8 @@ builder.Services.AddScoped<IEntityRepo<Item>, ItemRepo>();
 builder.Services.AddScoped<IEntityRepo<TransactionLine>, TransactionLineRepo>();
 
 builder.Services.AddScoped<IEntityRepo<Transaction>, TransactionRepo>();
-builder.Services.AddScoped<RentRepo>();//sosta to kano??
+builder.Services.AddScoped<MonthlyLedger, MonthlyLedger>();
+
 
 
 

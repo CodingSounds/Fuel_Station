@@ -54,7 +54,7 @@ else{
             </td>
             <td>
                 
-                <button class="btn btn-success btn-sm" @onclick=DOD >Calculate</button>
+                <button class="btn btn-success btn-sm" @onclick=Clacl >Calculate</button>
             </td>
             @if (false)
                 {<h4> @rent € </h4>
@@ -112,7 +112,7 @@ else{
          <tbody>
              <tr>
                  <td>@total</td>
-                 <td>@IncomeList</td>
+                 <td>@Income</td>
                  <td>@ExpensesList</td>
                  <td>@yearShow</td>
                 <td>@if ((MonthEnum)monthEnum !=MonthEnum.None && yearShow!=null )
@@ -138,19 +138,30 @@ else{
     [Parameter] public Guid? User { get; set; }
 
     private bool isLoading = true;
-    private decimal? IncomeList=null;
+    private decimal? Income=null;
     private decimal? ExpensesList = null;
     private decimal? total = null;
 
     private decimal rentShow=4000;
     private decimal rent;
 
+    List<decimal> _result = new();
+
+
+    List<TransactionViewModel> _transactionlist = new();
+    List<ItemViewModel> _itemList = new();
+
     private int? year=null;
     private int? yearShow = null;
 
-    private List<TransactionViewModel> _transactionList;
 
-    public MonthEnum monthEnum=new();
+    private int? monthShow = null;
+
+    private List<TransactionViewModel> _transactionList=new();
+
+    private MonthEnum monthEnum = new();
+    int month;
+
 
 
     protected override async Task OnInitializedAsync()
@@ -160,21 +171,39 @@ else{
 
         isLoading = false;
     }
-    public void DOD(){
-
+    public async void Clacl()
+    {
+        SetRent();
+        month = (int)monthEnum;
+        _result = await httpClient.GetFromJsonAsync<List<decimal>>($"MonthlyLedger/{year}/{month}/{rent}");
     }
     private void SetRent()
     {
         rent = rentShow;
     }
 
-    //////////////async Task()
-    //////////////{
+    ////////////async Task()
+    ////////////{
+
+
+    ////////////}
+    //private async Task<List<EmployeeViewModel>> LoadEmployees()
+    //{
+    //    return null;
+    //}
+    // private async Task<List<TransactionViewModel>> LoadTransactions()
+    //{
+    //     _transactionList = await httpClient.GetFromJsonAsync<List<TransactionViewModel>>($"Transaction/{User}");
+    //    return null;
+    //}
+    //  private async Task<List<ItemViewModel>> LoadItems()
+    //{
         
+    //   _itemList = await httpClient.GetFromJsonAsync<List<ItemViewModel>>($"Item/GetAllItems{User}");
+        
+    //    return null;
+    //}
 
-    //////////////}
-
-   
    
     //private bool CheckDate()
     //{
@@ -191,8 +220,8 @@ else{
     //{
     //    var month=(int)monthEnum;
     //    var yearNumber = (int)year;
-    //    IncomeList = 0;
-    //    IncomeList = _transactionList?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber)?.Sum(x => x.TotalPrice);
+    //    Income = 0;
+    //    Income = _transactionList?.Where(x=>x.Date.Month==month && x.Date.Year==yearNumber)?.Sum(x => x.TotalValue);
 
     //}
     //private void ExpensesCalculation()
@@ -264,7 +293,7 @@ else{
     //            ExpensesCalculation();
     //            IncomeCalculation();
     //            yearShow=year;
-    //            total = IncomeList - ExpensesList;
+    //            total = Income - ExpensesList;
     //        }
             
 

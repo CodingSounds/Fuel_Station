@@ -31,7 +31,8 @@ namespace FuelStation.EF.Repositories
         }
         public async Task<List<Employee>> GetAllAsync()
         {
-            return await _context.Employees.ToListAsync();
+            var t = await _context.Employees.ToListAsync();
+            return t;
         }
         public async Task<Employee?> GetByIdAsync(Guid id)
         {

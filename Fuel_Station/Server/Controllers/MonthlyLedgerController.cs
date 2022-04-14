@@ -14,36 +14,60 @@ namespace Fuel_Station.Server.Controllers
     {
         private readonly IEntityRepo<Transaction> _transactionRepo;
         private readonly IEntityRepo<TransactionLine> _transactionLineRepo;
-        
-        private readonly RentRepo _RentRepo;
+        private readonly IEntityRepo<Employee> _employeeRepo;
 
-        public MonthlyLedgerController(IEntityRepo<Transaction> transactionRepo, IEntityRepo<TransactionLine> transactionLineRepo,
-            RentRepo RentRepo)
+        //private readonly IEntityRepo<ItemRepo> _itemRepo;
+
+
+
+        public MonthlyLedgerController(IEntityRepo<Transaction> transactionRepo, IEntityRepo<Employee> employeeRepo,
+              IEntityRepo<TransactionLine> transactionLineRepo)
         {
             _transactionRepo = transactionRepo;
+            _employeeRepo = employeeRepo;
+         
             _transactionLineRepo = transactionLineRepo;
-            _RentRepo = RentRepo;
         }
 
-        [HttpGet("{month}/{year}")]
-        public async Task<IEnumerable<decimal>> Get(int month, int year)
+        [HttpGet("{month}/{year}/{rent}")]
+        public async Task<IEnumerable<decimal>> Get(int month, int year,decimal rent)
         {
+            var employeeList = await _employeeRepo.GetAllAsync();
+
             string date=month.ToString()+year.ToString();//desssssssss
-            decimal? rentCost = await _RentRepo.GetByIdAsync(date);
+           
             var tranList = await _transactionRepo.GetAllAsync();//to ekana ligo argo
             var tranLineList = await _transactionLineRepo.GetAllAsync();
 
             var activeTransList = tranList.FindAll(x => x.Date.Year == year&& x.Date.Month == month);
             var activeTransListID= activeTransList.Select(x=>x.ID).ToList();
             var activeTranslineList = tranLineList.FindAll(x => activeTransListID.Contains( x.ID));
-            var Income = activeTranslineList.Sum(x => x.TotalValueOfLine);
-            var Expenses = activeTranslineList.Sum(x => (1-x.DiscountPercentage)*x.Quantity*x.ItemPrice);
-            Expenses += rentCost.Value + Expenses;
-            var Total = Income - Expenses;
+            var Income = activeTransList.Sum(x => x.TotalValue);
+
+            var itemExpenses = activeTranslineList.Sum(x =>x.Item.Cost);
+
+            //var workingEmployees=
+            decimal employeeExpenses = 0;
+            var employeeWorking = employeeList.FindAll(x => x.HireDateStart.Year == year && x.HireDateStart.Month == month);
+            foreach(var employee in employeeWorking)
+            {
+                if(employee.HireDateEnd==null|| employee.HireDateEnd.Value.Month> month)
+                {
+                    employeeExpenses += employee.SalaryPerMonth;
+                }
+                else
+                {
+                    employeeExpenses += employee.SalaryPerMonth * (employee.HireDateEnd.Value.Day-1)/30;
+                }
+                
+            }
+            itemExpenses += rent + itemExpenses+ employeeExpenses;
+
+            var Total = Income - itemExpenses;
             var list=new List<decimal>();
             list.Add(Income);
-            list.Add(Expenses.Value);
-            list.Add(Total.Value);
+            list.Add(itemExpenses);
+            list.Add(Total);
 
             return list;
         }
