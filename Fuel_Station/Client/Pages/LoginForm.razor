@@ -5,9 +5,12 @@
 
 @inject HttpClient httpClient
 
-<h1>Login</h1>
 
-    <table class=table-stripped>
+
+<div class="col-lg-8 offset-lg-4 ">
+    <form  class="form-primary"  >
+        
+        <tr><h1>Login</h1></tr>
         <tr>
             <th> <label>Username</label></th>
             <input @bind=username pattern="[A-Za-z]{3,15}" title="It must be between 3 and 15 characters long. Only characters." />
@@ -18,18 +21,17 @@
             <input @bind=password pattern="[A-Za-z]{3,20}" title="It must be between 3 and 20 characters long. Only characters." />
 
         </tr>
-        
+
         <tr>
-            
+
             <th><button class="btn btn-primary " @onclick="()=>Login(password,username)">Login</button></th>
-        </tr>
-         
-        <tr>
-            
+
+
             <th><button class="btn btn-info " @onclick=NewUser>New User</button></th>
         </tr>
-
-    </table>
+       
+    </form>
+</div>
 
 @code {
     private string username;
