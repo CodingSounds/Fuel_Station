@@ -7,7 +7,28 @@
 @inject IJSRuntime jsRuntime
 
 <h1>Monthly Ledger</h1>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Fuel Station</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="btn btn-info" href=@($"/Employee/{User}")>Employees</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning" href=@($"/Customer/{User}")>Customers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-success" href=@($"/MonthlyLedger/{User}")>Monthly Ledger</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 
 @if (isLoading)
 {
@@ -54,10 +75,10 @@ else{
             </td>
             <td>
                 
-                <button class="btn btn-success btn-sm" @onclick=Clacl >Calculate</button>
+                <button class="btn btn-success btn-sm" @onclick=Calc >Calculate</button>
             </td>
-            @if (false)
-                {<h4> @rent € </h4>
+            @if (_setRent||_employeeType!=EmployeeTypeEnum.Manager)
+                {<h4> @rentShow € </h4>
 
                 }
                 else
@@ -113,7 +134,7 @@ else{
              <tr>
                  <td>@total</td>
                  <td>@Income</td>
-                 <td>@ExpensesList</td>
+                 <td>@Expenses</td>
                  <td>@yearShow</td>
                 <td>@if ((MonthEnum)monthEnum !=MonthEnum.None && yearShow!=null )
                     {
@@ -139,7 +160,7 @@ else{
 
     private bool isLoading = true;
     private decimal? Income=null;
-    private decimal? ExpensesList = null;
+    private decimal? Expenses = null;
     private decimal? total = null;
 
     private decimal rentShow=4000;
@@ -154,6 +175,8 @@ else{
     private int? year=null;
     private int? yearShow = null;
 
+    EmployeeTypeEnum _employeeType;
+
 
     private int? monthShow = null;
 
@@ -162,24 +185,42 @@ else{
     private MonthEnum monthEnum = new();
     int month;
 
+    private bool _setRent = false;
 
 
     protected override async Task OnInitializedAsync()
     {
-
+        await EmployeValidation();
 
 
         isLoading = false;
     }
-    public async void Clacl()
+    private async  Task EmployeValidation()
+    {
+        _employeeType = await httpClient.GetFromJsonAsync<EmployeeTypeEnum>($"Employee/GetTypeOfEmpl{User}");
+    }
+    public async void Calc()
     {
         SetRent();
         month = (int)monthEnum;
-        _result = await httpClient.GetFromJsonAsync<List<decimal>>($"MonthlyLedger/{year}/{month}/{rent}");
+
+        _result = await httpClient.GetFromJsonAsync<List<decimal>>($"MonthlyLedger/{year}/{month}/{rent}/{User}");
+
+        if (_result != null)
+        {
+            Income = _result[0];
+            Expenses = _result[1];
+            total = _result[2];
+            yearShow = year;
+            monthShow = month;
+
+        }
+
     }
     private void SetRent()
     {
         rent = rentShow;
+        _setRent = true;
     }
 
     ////////////async Task()

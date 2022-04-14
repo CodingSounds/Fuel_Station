@@ -1,0 +1,165 @@
+﻿
+
+
+@page "/NewUser"
+@using FuelStation.Models.Enums
+@using Fuel_Station.Shared
+
+@inject NavigationManager navManager
+
+@inject HttpClient httpClient
+
+@inject IJSRuntime jsRuntime
+<h1> New User</h1>
+<EditForm Model="@employeeView" OnValidSubmit="@Save">
+    <table class=table-stripped>
+        <td>
+                
+                    <InputSelect @bind-Value="newEmployeeType">
+                       
+                        
+                            
+                            @foreach(var employeeType in Enum.GetValues(typeof(EmployeeTypeEnum)))
+                            {
+                                if ((EmployeeTypeEnum)employeeType ==EmployeeTypeEnum.None )
+                                {
+                                <option value="@employeeType">Select A Employee Type</option>
+                                }
+                                else
+                                {
+                                <option value="@employeeType">@employeeType</option>
+                                }
+                            
+                            }   
+                            
+                               
+                    </InputSelect>
+               
+            </td>
+        <tr>
+            <th> <label>Name</label></th>
+             <input @bind=newName pattern="[A-Za-z]{3,15}" title="It must be between 3 and 15 characters long. Only characters." />
+        </tr>
+        <tr>
+            <th> <label>SurName</label></th>
+           <input @bind=newSurname pattern="[A-Za-z]{3,20}" title="It must be between 3 and 20 characters long. Only characters." />
+
+        </tr>
+         <tr>
+            <th> <label>SalaryPerMonth</label></th>
+            <input @bind=salaryPerMonth pattern="[0-9].{0,7}" title="It must be only number.Max 7 digits"/>
+
+        </tr>
+        <tr>
+            <th> <label>Username</label></th>
+            <input @bind=username pattern="[A-Za-z]{3,15}" title="It must be between 3 and 15 characters long. Only characters." />
+
+        </tr>
+        <tr>
+            <th> <label>Password</label></th>
+            <input @bind=password pattern="[A-Za-z]{3,20}" title="It must be between 3 and 20 characters long. Only characters." />
+
+        </tr>
+        
+       
+        <tr>
+            <th> <button type="submit" class="btn btn-primary " @*@onclick="Save"*@>Save</button></th>
+            <th><button class="btn btn-danger " @onclick=Goback>Cancel</button></th>
+        </tr>
+
+    </table>
+</EditForm>
+        
+         
+ 
+
+@code {
+
+    EmployeeViewModel employeeView = new EmployeeViewModel();
+
+
+
+    Guid User = Guid.NewGuid();
+
+    private string newName;
+    private string newSurname;
+    private string username;
+    private string password;
+    private decimal? salaryPerMonth;
+    private EmployeeTypeEnum newEmployeeType;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+        newName = null;
+        newSurname = null;
+        salaryPerMonth = null;
+         password = null;
+        username = null;
+
+
+       
+
+
+
+        //isLoading = true;
+        //await LoadCustomersFromServer();
+
+        //isLoading = false;
+    }
+
+
+
+
+
+    async Task  Save()
+    {
+
+        if(string.IsNullOrEmpty(newName)) return;
+        if(string.IsNullOrEmpty(newSurname)) return;
+        if(string.IsNullOrEmpty(salaryPerMonth.ToString())) return;
+        if(newEmployeeType==EmployeeTypeEnum.None) return;
+
+
+        if (employeeView == null)
+        {
+            employeeView = new();
+        }
+        employeeView.Name = newName;
+        employeeView.Surname = newSurname;
+        employeeView.SalaryPerMonth = salaryPerMonth.Value;
+        employeeView.Status = true;
+        employeeView.EmployeeType = newEmployeeType;
+        employeeView.Username = username;
+        employeeView.Password = password;
+
+
+        newName = null;
+        newSurname = null;
+
+        salaryPerMonth = null;
+        newEmployeeType = EmployeeTypeEnum.None;
+
+
+
+       
+            await httpClient.PostAsJsonAsync($"Employee/PostUser", employeeView);
+     
+          
+
+      
+
+        navManager.NavigateTo($"/");
+
+    }
+    async Task Goback()
+    {
+        navManager.NavigateTo($"/");
+    }
+
+   
+
+
+}

@@ -20,5 +20,8 @@ namespace Fuel_Station.Shared
         public decimal SalaryPerMonth { get; set; }
 
         public EmployeeTypeEnum EmployeeType { get; set; }
+
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

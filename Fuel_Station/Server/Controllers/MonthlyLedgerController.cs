@@ -2,8 +2,7 @@
 using FuelStation.Models;
 using Microsoft.AspNetCore.Mvc;
 using Fuel_Station.Shared;
-
-
+using FuelStation.Models.Enums;
 
 namespace Fuel_Station.Server.Controllers
 {
@@ -29,19 +28,25 @@ namespace Fuel_Station.Server.Controllers
             _transactionLineRepo = transactionLineRepo;
         }
 
-        [HttpGet("{month}/{year}/{rent}")]
-        public async Task<IEnumerable<decimal>> Get(int month, int year,decimal rent)
+        [HttpGet("{year}/{month}/{rent}/{user}")]
+        public async Task<IEnumerable<decimal>> Get(int year,int month,decimal rent,Guid user)
         {
             var employeeList = await _employeeRepo.GetAllAsync();
 
-            string date=month.ToString()+year.ToString();//desssssssss
-           
-            var tranList = await _transactionRepo.GetAllAsync();//to ekana ligo argo
+            decimal rentGeneral = 4000;
+            var userEmploy = await _employeeRepo.GetByIdAsync(user);
+            if (userEmploy.EmployeeType == EmployeeTypeEnum.Manager )
+            {
+                rentGeneral = rent;
+            }
+
+
+                var tranList = await _transactionRepo.GetAllAsync();//to ekana ligo argo
             var tranLineList = await _transactionLineRepo.GetAllAsync();
 
             var activeTransList = tranList.FindAll(x => x.Date.Year == year&& x.Date.Month == month);
             var activeTransListID= activeTransList.Select(x=>x.ID).ToList();
-            var activeTranslineList = tranLineList.FindAll(x => activeTransListID.Contains( x.ID));
+            var activeTranslineList = tranLineList.FindAll(x => activeTransListID.Contains( x.TransactionID));
             var Income = activeTransList.Sum(x => x.TotalValue);
 
             var itemExpenses = activeTranslineList.Sum(x =>x.Item.Cost);
@@ -61,12 +66,12 @@ namespace Fuel_Station.Server.Controllers
                 }
                 
             }
-            itemExpenses += rent + itemExpenses+ employeeExpenses;
+            var Expenses = rentGeneral + itemExpenses+ employeeExpenses;
 
-            var Total = Income - itemExpenses;
+            var Total = Income - Expenses;
             var list=new List<decimal>();
             list.Add(Income);
-            list.Add(itemExpenses);
+            list.Add(Expenses);
             list.Add(Total);
 
             return list;

@@ -148,9 +148,35 @@ namespace Fuel_Station.Server.Controllers
 
                     Status = true,
                 };
+                
                 await _employeeRepo.CreateAsync(employee);
             }
             
+
+        }
+        [HttpPost("PostUser")]
+
+        public async Task PostUser(EmployeeViewModel newEmployeeView)
+        {
+
+            Employee employee = new Employee
+            {
+
+                ID = Guid.NewGuid(),
+                Name = newEmployeeView.Name,
+                Surname = newEmployeeView.Surname,
+                HireDateStart = newEmployeeView.HireDateStart,
+                HireDateEnd = newEmployeeView.HireDateEnd,
+                SalaryPerMonth = newEmployeeView.SalaryPerMonth,
+                EmployeeType = newEmployeeView.EmployeeType,
+                UserName = newEmployeeView.Username,
+                Password = newEmployeeView.Password,
+                Status = true,
+            };
+         
+            await _employeeRepo.CreateAsync(employee);
+
+
 
         }
 

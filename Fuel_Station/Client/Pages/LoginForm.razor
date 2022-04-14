@@ -23,6 +23,11 @@
             
             <th><button class="btn btn-primary " @onclick="()=>Login(password,username)">Login</button></th>
         </tr>
+         
+        <tr>
+            
+            <th><button class="btn btn-info " @onclick=NewUser>New User</button></th>
+        </tr>
 
     </table>
 
@@ -46,7 +51,10 @@
     {
         //Employeelist = await httpClient.GetFromJsonAsync<List<EmployeeViewModel>>("Employee/GetAllEmployees");
     }
-
+    private async Task NewUser()
+    {
+        navManager.NavigateTo($"NewUser");
+    }
 
     private async Task Login(string password,string username)
     {
@@ -56,7 +64,7 @@
 
         if(ID!=null)
         {
-             navManager.NavigateTo($"Item/{ID}");
+             navManager.NavigateTo($"index/{ID}");
         }
         
        
